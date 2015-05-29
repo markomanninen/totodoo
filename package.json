@@ -9,12 +9,13 @@
   "devDependencies": {
     "selenium-webdriver": "latest",
     "chromedriver": "latest",
+    "coffee-script": "latest",
     "mocha": "latest",
     "chai": "latest",
     "chai-as-promised": "latest",
+    "sinon": "latest",
     "karma": "latest",
     "karma-mocha": "latest",
-    "sinon": "latest",
     "karma-html-reporter": "latest",
     "karma-selenium-webdriver-launcher": "latest"
   },
