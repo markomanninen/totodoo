@@ -1,4 +1,4 @@
-<?php namespace elonmedia\php;
+<?php namespace elonmedia\totodoo\php;
 
 class Library
 {

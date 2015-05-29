@@ -1,6 +1,6 @@
 <?php
 
-use \elonmedia\php\Library;
+use \elonmedia\totodoo\php\Library;
 
 class LibraryTest extends PHPUnit_Framework_TestCase
 {
