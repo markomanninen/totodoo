@@ -2,16 +2,21 @@
   "name": "totodoo",
   "version": "0.0.1",
   "description": "totodoo",
-  "keywords": [],
+  "keywords": ["elonmedia", "totodoo"],
   "dependencies": {
-    "wd": "~0.2.8",
-    "promise": "~3.2.0",
-    "ms": "~0.6.2"
+    "requirejs": "latest"
   },
   "devDependencies": {
-    "mocha": "*",
-    "chromedriver": "~2.6.0",
-    "gnode": "0.0.5"
+    "selenium-webdriver": "latest",
+    "chromedriver": "latest",
+    "mocha": "latest",
+    "chai": "latest",
+    "chai-as-promised": "latest",
+    "karma": "latest",
+    "karma-mocha": "latest",
+    "sinon": "latest",
+    "karma-html-reporter": "latest",
+    "karma-mp3-reporter": "latest"
   },
   "repository": {
     "type": "git",
