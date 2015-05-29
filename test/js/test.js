@@ -4,15 +4,19 @@ var assert = require('assert'),
     test = require('selenium-webdriver/testing'),
     webdriver = require('selenium-webdriver');
  
-function writeScreenshot(data, name, driver) {
+function writeScreenshot(data, name, driver, done) {
     name = name || 'ss.png';
     var screenshotPath = '/tmp/';
     fs.writeFileSync(screenshotPath + name, data, 'base64');
     driver.quit();
+    setTimeout(done, 2000);
 };
  
 test.describe('Vapid Space', function() {
-    test.it('should show home page', function() {
+	
+	this.timeout(5000);
+
+    test.it('should show home page', function(done) {
  
         var driver = new webdriver.Builder()
             .withCapabilities(webdriver.Capabilities.chrome())
@@ -21,7 +25,7 @@ test.describe('Vapid Space', function() {
         driver.get('http://www.vapidspace.com');
  
         driver.takeScreenshot().then(function(data) {
-            writeScreenshot(data, 'out1.png', driver);
+            writeScreenshot(data, 'out1.png', driver, done);
         });
  
         //driver.quit();
