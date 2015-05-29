@@ -9,6 +9,7 @@
   "devDependencies": {
     "selenium-webdriver": "latest",
     "chromedriver": "latest",
+    "phantomjs": "latest",
     "coffee-script": "latest",
     "mocha": "latest",
     "chai": "latest",
