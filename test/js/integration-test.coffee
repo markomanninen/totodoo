@@ -4,7 +4,7 @@ chai.use require 'chai-as-promised'
 expect = chai.expect
 
 before ->
-	@timeout 10000
+	@timeout 30000
 	@driver = new selenium.Builder()
 		.withCapabilities(selenium.Capabilities.chrome())
 		.build()
