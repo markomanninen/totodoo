@@ -9,17 +9,17 @@ function writeScreenshot(data, name, driver, done) {
     var screenshotPath = '/tmp/';
     fs.writeFileSync(screenshotPath + name, data, 'base64');
     driver.quit();
-    setTimeout(done, 2000);
+    setTimeout(done, 5000);
 };
  
 test.describe('Vapid Space', function() {
 	
-	this.timeout(5000);
+	this.timeout(10000);
 
     test.it('should show home page', function(done) {
  
         var driver = new webdriver.Builder()
-            .withCapabilities(webdriver.Capabilities.chrome())
+            .withCapabilities(webdriver.Capabilities.phantomjs())
             .build();
  
         driver.get('http://www.vapidspace.com');
