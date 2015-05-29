@@ -20,8 +20,8 @@ before_script:
 
 script:
   - phpunit
-  - node_modules/.bin/mocha ./test/js/integration-test.coffee --compilers coffee:coffee-script/register
-  - node_modules/.bin/mocha ./test/js/test.js
+  - node_modules/.bin/mocha ./test/js/integration-test.coffee --compilers coffee:coffee-script/register  --timeout 10000
+  - node_modules/.bin/mocha ./test/js/test.js --timeout 10000
 
 matrix:
   fast_finish: true
