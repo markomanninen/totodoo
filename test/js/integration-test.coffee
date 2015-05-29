@@ -4,14 +4,14 @@ chai.use require 'chai-as-promised'
 expect = chai.expect
 
 before ->
-	@timeout 30000
+	@timeout 10000
 	@driver = new selenium.Builder()
 		.withCapabilities(selenium.Capabilities.chrome())
 		.build()
 	@driver.getWindowHandle()
 
 after ->
-	@driver.quit()
+	@driver.quit().then -> done()
 
 describe 'Webdriver tutorial', ->
 	beforeEach ->
