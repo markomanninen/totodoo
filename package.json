@@ -1,0 +1,20 @@
+{
+    "name": "markomanninen/totodoo",
+    "description": "Totodoo - Todo sample application with StormPath integration.",
+    "keywords": ["organization", "module"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marko Manninen",
+            "email": "elonmedia@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "4.0.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "elonmedia": "src/"
+        }
+    }
+}
