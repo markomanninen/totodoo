@@ -16,7 +16,7 @@
     "karma-mocha": "latest",
     "sinon": "latest",
     "karma-html-reporter": "latest",
-    "karma-mp3-reporter": "latest"
+    "karma-selenium-webdriver-launcher": "latest"
   },
   "repository": {
     "type": "git",
