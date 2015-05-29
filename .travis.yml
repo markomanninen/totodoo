@@ -8,9 +8,11 @@ php:
 
 before_script:
   - sudo apt-get update > /dev/null
-  - sudo apt-get install -y --force-yes apache2 libapache2-mod-php5 php5-curl php5-mysql php5-intl php5-ssl
+  - sudo apt-get install -y --force-yes apache2 libapache2-mod-php5 php5-curl php5-mysql php5-intl
   - sudo sed -i -e "s,/var/www,$(pwd)/web,g" /etc/apache2/sites-available/default
   - sudo /etc/init.d/apache2 restart
+  - mkdir -p ~/.composer
+  - cp .travis.composer.config.json ~/.composer/config.json
   - composer self-update
   - composer install --prefer-source --no-interaction
   - npm install selenium-webdriver selenium-chromedriver
