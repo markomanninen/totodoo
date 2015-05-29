@@ -1,0 +1,44 @@
+OS X 10.10.3 (14D136)
+
+node --version v0.10.33
+
+npm --version -> 1.4.28
+
+sudo npm install selenium-webdriver -> selenium-webdriver@2.45.1
+
+sudo npm install mocha -> mocha@2.2.5
+
+sudo npm install coffee-script -> coffee-script@1.9.3
+
+sudo npm install chai -> chai@2.3.0
+
+sudo npm install chai-as-proised -> chai-as-promised@5.0.0
+
+created ./test/integration-test.coffee
+
+node node_modules/.bin/mocha ./test/integration-test.coffee --compilers coffee:coffee-script/register
+
+firefox selemiun driver crashes... trying chrome
+
+sudo npm install selenium-chromedriver
+
+selenium-chromedriver@0.0.2
+
+Still path problems with driver. Using homebrew for install:
+
+brew install chromedriver
+
+node node_modules/.bin/mocha ./test/integration-test.coffee --compilers coffee:coffee-script/register
+
+WORKS!
+
+sudo npm install selenium-mocha
+
+travis...
+
+curl -sS https://getcomposer.org/installer | php
+
+touch phpunit.php
+
+touch phpunit.xml
+
