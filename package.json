@@ -1,0 +1,22 @@
+{
+  "name": "totodoo",
+  "version": "0.0.1",
+  "description": "totodoo",
+  "keywords": [],
+  "dependencies": {
+    "wd": "~0.2.8",
+    "promise": "~3.2.0",
+    "ms": "~0.6.2"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "chromedriver": "~2.6.0",
+    "gnode": "0.0.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/markomanninen/totodoo.git"
+  },
+  "author": "Marko Manninen",
+  "license": "MIT"
+}
