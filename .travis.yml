@@ -16,13 +16,12 @@ before_script:
   - export DISPLAY=:99.0
   - wget http://selenium.googlecode.com/files/selenium-server-standalone-2.39.0.jar
   - java -jar selenium-server-standalone-2.39.0.jar > /tmp/selenium.log 2> /tmp/selenium.error &
-  - /home/travis/.phpenv/versions/5.5/bin/composer self-update
   - composer install --prefer-source --no-interaction
 
 script:
   - phpunit
-  - node_modules/.bin/mocha ./test/js/integration-test.coffee --compilers coffee:coffee-script/register  --timeout 20000
-  - node_modules/.bin/mocha ./test/js/test.js --timeout 20000
+  - node_modules/.bin/mocha ./test/js/integration-test.coffee --compilers coffee:coffee-script/register  --timeout 30000
+  - node_modules/.bin/mocha ./test/js/test.js --timeout 30000
 
 matrix:
   fast_finish: true

@@ -9,12 +9,12 @@ function writeScreenshot(data, name, driver, done) {
     var screenshotPath = '/tmp/';
     fs.writeFileSync(screenshotPath + name, data, 'base64');
     driver.quit();
-    setTimeout(done, 5000);
+    setTimeout(done, 8000);
 };
  
 test.describe('Vapid Space', function() {
 	
-	this.timeout(10000);
+	this.timeout(16000);
 
     test.it('should show home page', function(done) {
  

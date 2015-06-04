@@ -12,7 +12,7 @@ sudo npm install coffee-script -> coffee-script@1.9.3
 
 sudo npm install chai -> chai@2.3.0
 
-sudo npm install chai-as-proised -> chai-as-promised@5.0.0
+sudo npm install chai-as-promised -> chai-as-promised@5.0.0
 
 created ./test/integration-test.coffee
 
