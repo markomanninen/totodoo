@@ -1,28 +1,63 @@
 function totodoo(data) {
 
+	$('body').on('focus', '[contenteditable]', function() {
+	    var $this = $(this);
+	    $this.data('before', $this.html());
+	    return $this;
+	}).on('blur keyup paste input', '[contenteditable]', function() {
+	    var $this = $(this);
+	    if ($this.data('before') !== $this.html()) {
+	        $this.data('before', $this.html());
+	        $this.trigger('change');
+	    }
+	    return $this;
+	});
 
 	var selectedList;
-	var lists = data;
+
+    var obs = BaseModelObserver();
+    var moh = ModelObserverHandlers(obs);
+    obs.handler.define(moh.valueHandler);
+
+    var logger = {
+        initter: function(value, model, property, property_stack, parent) {
+            //console.log(["init", value, model, property, property_stack.join('.'), parent]);
+            return value;
+        },
+        getter: function(value, property_stack) {
+            //console.log(["get", value, property_stack.join('.')]);
+            return value;
+        },
+        setter: function(value, old_value, property_stack) {
+            console.log(["set", value, old_value, property_stack.join('.')]);
+            return value;
+        }
+    };
+
+    // add new log handler upon valueHandler!
+
+    obs.handler.define(logger);
+
+    var lists = obs.createModel(data);
 
 	init();
 
+	// initialize on application startup
 	function init() {
         
+        // triggers and handlers
         addItemAdder();
         addFilters();
         addAllTogglable();
         initItems();
 
+        // populate todo menu list and add triggers
         createTodoListsMenu();
-        selectList();
-        todoTitleName();
-        addChangeListTriggers();
-        loadItems();
-
 	};
 
-	// init items, called on init app and addNewTodoItem
+	// init items, called on on application startup and addNewTodoItem
 	function initItems() {
+		// triggers and handlers
 		addRemovers();
 		addEditables();
 		addItemInputToggles();
@@ -33,11 +68,19 @@ function totodoo(data) {
 		$('input#new-todo').keypress(function(e) {
 	        if (e.which == 13) {
 	        	var id = guid();
-	        	addItemtoModel($(this).val(), id);
-	            addNewTodoItem($(this).val(), id);
+	        	var item = addItemtoModel($(this).val(), id);
+	            addNewTodoItem($(this).val(), id, false, item.path.join('.'));
 	            $(this).val('');
 	        }
 	    });
+	}
+
+	function getNode(model, path) {
+		var n = path.shift();
+		if (path.length > 0) {
+			return getNode(model[n], path);
+		}
+		return model[n];
 	}
 
 	function addFilters() {
@@ -79,6 +122,7 @@ function totodoo(data) {
 	            div.prop("contentEditable", "false").removeClass('doubleClicked');
 	        } else {
 	            div.dblclick(function(e) {
+	            	// there is editing class available too!
 	                $(this).prop("contentEditable", "true").addClass('doubleClicked');
 	                this.focus();
 	            });
@@ -100,6 +144,16 @@ function totodoo(data) {
 	    });
 		$('ul#todo-list li div label div').unbind('blur');
 	    $('ul#todo-list li div label div').on('blur', function(e) {
+	        $(this).prop("contentEditable", "false").removeClass('doubleClicked');
+	    });
+
+		$('h1 span#listName').unbind('dblclick');
+	    $('h1 span#listName').dblclick(function(e) {
+	        $(this).prop("contentEditable", "true").addClass('doubleClicked');
+	        this.focus();
+	    });
+		$('h1 span#listName').unbind('blur');
+	    $('h1 span#listName').on('blur', function(e) {
 	        $(this).prop("contentEditable", "false").removeClass('doubleClicked');
 	    });
 	}
@@ -148,29 +202,43 @@ function totodoo(data) {
 	    });
 	}
 
-	function addNewTodoItem(item, dataid, completed) {
-		var new_item = itemTemplate(item, dataid, completed);
+	function addNewTodoItem(item, dataid, completed, path) {
+		var new_item = itemTemplate(item, dataid, completed, path);
 	    $('#todo-list').prepend(new_item);
 	    $('#todo-list li').first().effect("highlight", {}, 500);
+
+	    $('[data-bind="'+path+'.completed"]').unbind('change');
+        $('[data-bind="'+path+'.completed"]').change(function() {
+        	var properties = path.split('.');
+    		properties.shift();
+    		var model = getNode(lists, properties);
+            model.completed = !model.completed.value;
+        });
+
+        $('[data-bind="'+path+'.name"]').unbind('change');
+        $('[data-bind="'+path+'.name"]').change(function() {
+        	var properties = path.split('.');
+    		properties.shift();
+    		var model = getNode(lists, properties);
+            model.name = $('[data-bind="'+path+'.name"]').text();
+        });
+
 	    initItems();
 	}
 
-	function itemTemplate(value, dataid, completed) {
+	function itemTemplate(value, dataid, completed, path) {
 		completed = completed || false;
 		var checked = completed ? ' checked="checked"' : '';
 		var className = completed ? ' class="completed"' : '';
-	    return '<li'+className+' data-id="'+dataid+'"><div class="view"><input class="toggle" type="checkbox"'+checked+' /><label><div>'+value+'</div></label><button class="destroy"></button></div></li>';
+	    return '<li'+className+' data-id="'+dataid+'"><div class="view"><input data-type="boolean" data-bind="'+path+'.completed" class="toggle" type="checkbox"'+checked+' /><label><div class="editable" data-bind="'+path+'.name">'+value+'</div></label><button class="destroy"></button></div></li>';
 	}
 
 	function addItemtoModel(item, dataid, completed) {
 		dataid = dataid || guid();
 		completed = completed || false;
-    	var obs = BaseModelObserver();
-        var moh = ModelObserverHandlers();
-        obs.handler.define(moh.valueHandler);
-        var m = obs.createModel({id: dataid, name: item, completed: completed});
-        selectedList.items.push(m);
-    	selectedList.items = selectedList.items;
+        var model = {id: dataid, name: item, completed: completed};
+        selectedList.items.push(model);
+    	return selectedList.items[selectedList.items.length-1];
 	}
 
 	function selectList() {
@@ -191,11 +259,17 @@ function totodoo(data) {
         $('ul#todo-list li').remove();
         for (var i in selectedList.items) {
             var m = selectedList.items[i];
-            addNewTodoItem(m.name.value, m.id.value, m.completed.value);
+            addNewTodoItem(m.name.value, m.id.value, m.completed.value, m.path.join('.'));
         }
     }
 
     function addChangeListTriggers() {
+    	// setup page header -> todo::{name}
+        todoTitleName();
+        // select list that is classified as active
+        selectList();
+        // load items
+        loadItems();
         $('ul#todo-lists li a').unbind('click');
         $('ul#todo-lists li a').click(function() {
             $('ul#todo-lists li a').parent().removeClass('active');
@@ -211,17 +285,26 @@ function totodoo(data) {
         var span = $('span#listName');
         span.text(li.text());
         span.attr('data-bind', li.find('a').attr('data-bind'));
+        
+        span.unbind('change');
+        span.change(function() {
+        	var properties = $(this).attr('data-bind').split('.');
+    		properties.shift();
+    		var model = getNode(lists, properties);
+            model.name = $(this).text();
+            li.find('a').text($(this).text());
+        });
     }
 
     function createTodoListItem(ul, key, divider, name, state) {
         var model = lists[key];
-        if (model.length) {
+        if (model && model.length) {
             var div = divider ? '<li class="divider"></li>' : '';
             ul.append(div+'<li class="dropdown-header">'+name+'</li>');
             for (var i in model) {
                 var m = model[i];
                 var className = state.active ? ' class="active"' : '';
-                ul.append('<li id="'+m.id.value+'"'+className+' type="'+key+'"><a data-bind="'+m.path.join('.')+'" href="#">'+m.name.value+'</a></li>');
+                ul.append('<li id="'+m.id.value+'"'+className+' type="'+key+'"><a data-bind="'+m.path.join('.')+'.name" href="#">'+m.name.value+'</a></li>');
                 state.active = false;
             }
         }
@@ -233,12 +316,11 @@ function totodoo(data) {
         createTodoListItem(ul, 'publicLists', false, 'Public lists', state);
         createTodoListItem(ul, 'sharedLists', true, 'Shared lists', state);
         createTodoListItem(ul, 'privateLists', true, 'My lists', state);
+        addChangeListTriggers();
     }
 
 	return {data: data}
 }
-
-
 
 function guid() {
 	function s4() {
