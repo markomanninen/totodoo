@@ -13,6 +13,7 @@ before_script:
   - sudo /etc/init.d/apache2 restart
   - npm install -g bower
   - npm install -g mocha
+  - npm install -g coffee-script
   - bower install jquery bootstrap jquery-ui autobahnjs amplify modelobserver
   - sh -e /etc/init.d/xvfb start
   - export DISPLAY=:99.0
