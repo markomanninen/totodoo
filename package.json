@@ -9,7 +9,6 @@
     "requirejs": "latest"
   },
   "devDependencies": {
-    "selenium-webdriver": "latest",
     "chromedriver": "latest",
     "phantomjs-prebuilt": "latest",
     "chai": "latest",
