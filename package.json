@@ -11,7 +11,7 @@
   "devDependencies": {
     "selenium-webdriver": "latest",
     "chromedriver": "latest",
-    "phantomjs": "latest",
+    "phantomjs-prebuilt": "latest",
     "coffee-script": "latest",
     "mocha": "latest",
     "chai": "2.1.2",
