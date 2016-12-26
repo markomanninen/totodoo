@@ -11,7 +11,10 @@ before_script:
   - sudo apt-get install -y --force-yes apache2 libapache2-mod-php5 php5-curl php5-mysql php5-intl
   - sudo sed -i -e "s,/var/www,$(pwd)/web,g" /etc/apache2/sites-available/default
   - sudo /etc/init.d/apache2 restart
-  - npm install -g bower selenium-webdriver mocha coffee-script
+  - npm install -g bower
+  - npm install -g selenium-webdriver
+  - npm install -g mocha
+  - npm install -g coffee-script
   - bower install jquery bootstrap jquery-ui autobahnjs amplify modelobserver
   - sh -e /etc/init.d/xvfb start
   - export DISPLAY=:99.0
