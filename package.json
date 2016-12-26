@@ -6,7 +6,8 @@
   "author": "Marko Manninen",
   "license": "MIT",
   "dependencies": {
-    "requirejs": "latest"
+    "requirejs": "latest",
+    "bower": "latest"
   },
   "devDependencies": {
     "selenium-webdriver": "latest",
