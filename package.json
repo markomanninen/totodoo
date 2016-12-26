@@ -1,8 +1,10 @@
 {
   "name": "totodoo",
-  "version": "0.0.1",
-  "description": "totodoo",
+  "version": "0.0.2",
+  "description": "Totodoo - Todo sample application with StormPath integration.",
   "keywords": ["elonmedia", "totodoo"],
+  "author": "Marko Manninen",
+  "license": "MIT",
   "dependencies": {
     "requirejs": "latest"
   },
@@ -23,7 +25,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/markomanninen/totodoo.git"
-  },
-  "author": "Marko Manninen",
-  "license": "MIT"
+  }
 }

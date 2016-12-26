@@ -16,19 +16,21 @@ function totodoo(data) {
 	var selectedList;
 
     var obs = BaseModelObserver();
-    var moh = ModelObserverHandlers(obs);
-    obs.handler.define(moh.valueHandler);
+    //var moh = ModelObserverHandlers(obs);
+    var moh = ModelValueTriggers(obs);
+    //obs.handler.define(moh.valueHandler);
+    obs.triggers.defines(moh.valueTriggers);
 
     var logger = {
-        initter: function(value, model, property, property_stack, parent) {
+        init: function(value, model, property, property_stack, parent) {
             //console.log(["init", value, model, property, property_stack.join('.'), parent]);
             return value;
         },
-        getter: function(value, property_stack) {
+        get: function(value, property_stack) {
             //console.log(["get", value, property_stack.join('.')]);
             return value;
         },
-        setter: function(value, old_value, property_stack) {
+        set: function(value, old_value, property_stack) {
             console.log(["set", value, old_value, property_stack.join('.')]);
             return value;
         }
@@ -36,7 +38,8 @@ function totodoo(data) {
 
     // add new log handler upon valueHandler!
 
-    obs.handler.define(logger);
+    //obs.handler.define(logger);
+    obs.triggers.defines(logger);
 
     var lists = obs.createModel(data);
 
