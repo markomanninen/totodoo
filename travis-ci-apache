@@ -1,8 +1,18 @@
 
-ServerName site.dev
-DocumentRoot "/var/www"
+<VirtualHost *:80>
+
+	ServerName site.dev
+	DocumentRoot "/var/www"
+
+	ErrorLog "/var/www/apache-error.log"
+	CustomLog "/var/www/apache-access.log" combined
+
+</VirtualHost>
 
 <VirtualHost *:8080>
+
+    ServerName site.dev
+	DocumentRoot "/var/www"
 
 	ErrorLog "/var/www/apache-error.log"
 	CustomLog "/var/www/apache-access.log" combined
