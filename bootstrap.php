@@ -13,7 +13,7 @@ if (!file_exists(dirname(__FILE__) . '/composer.lock')) {
 // Include the composer autoloader
 require_once  'vendor/autoload.php';
 
-$_SESSION['user'] = 'markom';
+$_SESSION['user'] = array('firstname' => 'Marko', 'lastname' => 'Manninen');
 
 class Status {
 	function __construct() {
