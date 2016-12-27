@@ -39,7 +39,7 @@ describe 'Totodoo App', ->
 	@timeout 12000
 
 	beforeEach ->
-		@driver.get 'http://localhost/'
+		@driver.get 'http://localhost:8080/'
 
 	it 'has the title of the application in the window\'s title', (done) ->
 		expect(@driver.getTitle()).to.eventually.contain
