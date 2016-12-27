@@ -15,7 +15,7 @@ before_script:
   - sudo apt-get install -y --force-yes apache2 libapache2-mod-fastcgi
   - sudo apt-get install -y --force-yes php5-dev php-pear php5-curl php5-mysql php5-intl php5-gd php5-json php5-sqlite php5-pgsql
   - sudo a2enmod headers
-  - sudo groupadd nobody
+  #- sudo groupadd nobody
   # enable php-fpm
   - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
   - sudo a2enmod rewrite actions fastcgi alias
@@ -39,6 +39,7 @@ before_script:
   - phpenv config-add custom-php.ini
   #- ls -l $(pwd)
   - sleep 5
+  - wget http://localhost/index.php
 
 script:
   - phpunit
