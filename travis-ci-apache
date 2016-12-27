@@ -1,18 +1,10 @@
 # Ensure that Apache listens on port 80
-Listen 80
 Listen 8080
 
 ServerName site.dev
 DocumentRoot "/var/www"
 
-<VirtualHost 127.0.0.1:80>
-
-	ErrorLog "/var/www/apache-error.log"
-	CustomLog "/var/www/apache-access.log" combined
-
-</VirtualHost>
-
-<VirtualHost 127.0.0.1:8080>
+<VirtualHost *:8080>
 
 	ErrorLog "/var/www/apache-error.log"
 	CustomLog "/var/www/apache-access.log" combined
