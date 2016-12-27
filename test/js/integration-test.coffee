@@ -33,3 +33,15 @@ describe 'Webdriver tutorial', ->
 		@driver.findElement(linkText: 'Bites').click()
 		expect(@driver.getCurrentUrl()).to.eventually.equal 'http://bites.goodeggs.com/'
 		@timeout 4000, done()
+
+describe 'Totodoo App', ->
+
+	@timeout 12000
+
+	beforeEach ->
+		@driver.get 'http://localhost/'
+
+	it 'has the title of the application in the window\'s title', (done) ->
+		expect(@driver.getTitle()).to.eventually.contain
+		'Totodoo App'
+		@timeout 4000, done()
