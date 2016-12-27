@@ -1,6 +1,7 @@
 
 <VirtualHost *:80>
 
+	DirectoryIndex index.php index.phtml index.html index.htm
 	DocumentRoot "/var/www"
 
 	<Directory "/var/www">
