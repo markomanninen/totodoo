@@ -8,14 +8,6 @@
 
         Options Indexes MultiViews FollowSymLinks
 
-        AllowOverride None
-
-        Order deny,allow
-
-        Deny from all
-
-        Allow from 127.0.0.0/255.0.0.0 ::1/128
-
     </Directory>
 
 	ErrorLog "/var/www/apache-error.log"
@@ -31,14 +23,6 @@
 	<Directory "/var/www/">
 
         Options Indexes MultiViews FollowSymLinks
-
-        AllowOverride None
-
-        Order deny,allow
-
-        Deny from all
-
-        Allow from 127.0.0.0/255.0.0.0 ::1/128
 
     </Directory>
 

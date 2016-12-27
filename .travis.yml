@@ -16,7 +16,7 @@ before_script:
   - tail /etc/apache2/sites-available/default
   - sudo cp -f travis-ci-apache /etc/apache2/sites-available/default
   - sudo sed -i -e "s,/var/www,$(pwd),g" --in-place /etc/apache2/sites-available/default
-  - echo "127.0.0.1 http://site.dev" | tee --append /etc/hosts > /dev/null
+  - sudo echo "127.0.0.1 http://site.dev" | tee --append /etc/hosts > /dev/null
   - sudo /etc/init.d/apache2 restart
   - npm update
   - bower install jquery bootstrap jquery-ui autobahnjs amplify modelobserver
