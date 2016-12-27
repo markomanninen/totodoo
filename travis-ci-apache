@@ -1,7 +1,6 @@
 
 <VirtualHost *:80>
 
-	ServerName site.dev
 	DocumentRoot "/var/www"
 
 	<Directory "/var/www/">
@@ -17,7 +16,6 @@
 
 <VirtualHost *:8080>
 
-    ServerName site.dev
 	DocumentRoot "/var/www"
 
 	<Directory "/var/www/">
