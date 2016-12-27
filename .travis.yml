@@ -21,6 +21,8 @@ before_script:
   - sudo a2enmod rewrite actions fastcgi alias
   - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
+  - phpenv config-add custom-php.ini
+  - phpenv config-rm xdebug.ini
   - sudo cp -f travis-ci-apache /etc/apache2/sites-available/default
   - sudo sed -i -e "s,/var/www,$(pwd),g" --in-place /etc/apache2/sites-available/default
   #- echo "127.0.0.1 http://site.dev" | sudo tee --append /etc/hosts > /dev/null
@@ -36,10 +38,9 @@ before_script:
   - wget http://selenium-release.storage.googleapis.com/3.0/selenium-server-standalone-3.0.1.jar
   - java -jar selenium-server-standalone-3.0.1.jar > /tmp/selenium.log 2> /tmp/selenium.error &
   - composer install --prefer-source --no-interaction
-  - phpenv config-add custom-php.ini
   #- ls -l $(pwd)
   - sleep 5
-  - wget http://localhost/index.php
+  - wget http://127.0.0.1:80/index.php
 
 script:
   - phpunit
