@@ -19,7 +19,24 @@ describe 'Totodoo App', ->
 	beforeEach ->
 		@driver.get 'http://127.0.0.1/'
 
-	it 'has the title of the application in the window\'s title', (done) ->
-		expect(@driver.getTitle()).to.eventually.contain
-		'Totodoo App'
-		@timeout 4000, done()
+	describe 'Init', ->
+
+		it 'has the title of the application in the window\'s title', (done) ->
+			expect(@driver.getTitle()).to.eventually.contain
+			'Totodoo App'
+			@timeout 4000, done()
+
+	describe 'Lists', ->
+
+		describe 'Select list', ->
+
+		describe 'Create list', ->
+
+		describe 'Modify list', ->
+
+		describe 'Delete list', ->
+
+	describe 'Items', ->
+
+	describe 'User', ->
+
