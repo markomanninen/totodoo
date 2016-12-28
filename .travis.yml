@@ -12,15 +12,16 @@ install:
 
 before_script:
   - sudo apt-get update > /dev/null
-  - sudo apt-get install -y --force-yes apache2 libapache2-mod-fastcgi
+  - sudo apt-get install -y --force-yes apache2 libapache2-mod-php5
+  #- sudo apt-get install -y --force-yes apache2 libapache2-mod-fastcgi
   - sudo apt-get install -y --force-yes php5-dev php-pear php5-curl php5-mysql php5-intl php5-gd php5-json php5-sqlite php5-pgsql
   - sudo a2enmod headers
   #- sudo groupadd nobody
   # enable php-fpm
-  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
-  - sudo a2enmod rewrite actions fastcgi alias
-  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
+  #- sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+  #- sudo a2enmod rewrite actions fastcgi alias
+  #- echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  #- ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
   - phpenv config-add custom-php.ini
   - phpenv config-rm xdebug.ini
   - sudo cp -f travis-ci-apache /etc/apache2/sites-available/default
@@ -29,8 +30,8 @@ before_script:
   - echo "ServerName localhost" | sudo tee /etc/hosts
   #- echo "ServerName localhost" | sudo tee /etc/apache2/conf-available/servername.conf
   #- sudo a2enconf servername
-  #- sudo /etc/init.d/apache2 restart
-  - sudo service apache2 restart
+  - sudo /etc/init.d/apache2 restart
+  #- sudo service apache2 restart
   - npm update
   - bower install jquery bootstrap jquery-ui autobahnjs amplify modelobserver
   - sh -e /etc/init.d/xvfb start
@@ -40,13 +41,14 @@ before_script:
   - composer install --prefer-source --no-interaction
   #- ls -l $(pwd)
   #- sleep 5
-  #- wget http://127.0.0.1:80/index.php
   #- php ./index.php
   - curl http://127.0.0.1:80/index.php
+  - curl http://127.0.0.1/
 
 script:
   - phpunit
-  - mocha ./test/js/integration-test.coffee --compilers coffee:coffee-script/register --timeout 30000
+  #- mocha ./test/js/integration-test.coffee --compilers coffee:coffee-script/register --timeout 30000
+  - mocha ./test/js/totodoo.coffee --compilers coffee:coffee-script/register --timeout 30000
   - mocha ./test/js/test.js --timeout 30000
 
 matrix:
