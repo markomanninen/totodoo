@@ -41,7 +41,8 @@ before_script:
   #- ls -l $(pwd)
   #- sleep 5
   #- wget http://127.0.0.1:80/index.php
-  - php ./index.php
+  #- php ./index.php
+  - curl http://127.0.0.1:80/index.php
 
 script:
   - phpunit
