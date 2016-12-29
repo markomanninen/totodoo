@@ -27,6 +27,8 @@ describe 'Totodoo App', ->
 			@timeout 4000, done()
 
 		it 'is the name of the default list', (done) ->
+			text = @driver.findElement(js: 'return document.getElementById("listName")').getText()
+			expect(text).to.eventually.equal 'Public list 1'
 			@timeout 4000, done()
 
 	describe 'List actions', ->
