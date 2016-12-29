@@ -32,9 +32,9 @@ describe 'Totodoo App', ->
 			expect(text).to.eventually.equal 'Public list 1'
 			@timeout 10000, done()
 
-		it 'is the lenght of the default list items = 2', (done) ->
+		it 'is the length of the default list items = 2', (done) ->
 			lis = @driver.findElement(id: 'todo-list').findElements(tagName: 'li')
-			expect(lis.count()).to.eventually.equal 2
+			expect(lis.size()).to.eventually.equal 2
 			@timeout 10000, done()
 
 	describe 'List actions', ->
@@ -73,13 +73,13 @@ describe 'Totodoo App', ->
 		it 'is the length of the completd items = 1', (done) ->
 			@driver.findElement(linkText: 'Completed').click()
 			lis = @driver.findElement(id: 'todo-list').findElements(tagName: 'li')
-			expect(lis.count()).to.eventually.equal 1
+			expect(lis.size()).to.eventually.equal 1
 			@timeout 10000, done()
 
 		it 'is the length of the active items = 1', (done) ->
 			@driver.findElement(linkText: 'Active').click()
 			lis = @driver.findElement(id: 'todo-list').findElements(tagName: 'li')
-			expect(lis.count()).to.eventually.equal 1
+			expect(lis.size()).to.eventually.equal 1
 			@timeout 10000, done()
 
 		describe 'Add item', ->
