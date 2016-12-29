@@ -26,7 +26,10 @@ describe 'Totodoo App', ->
 			'Totodoo App'
 			@timeout 4000, done()
 
-	describe 'Lists', ->
+		it 'is the name of the default list', (done) ->
+			@timeout 4000, done()
+
+	describe 'List actions', ->
 
 		describe 'Select list', ->
 
@@ -36,7 +39,23 @@ describe 'Totodoo App', ->
 
 		describe 'Delete list', ->
 
-	describe 'Items', ->
+	describe 'Item actions', ->
 
-	describe 'User', ->
+		describe 'Add item', ->
+
+		describe 'Complete item', ->
+
+		describe 'Uncomplete item', ->
+
+		describe 'Remove item', ->
+
+		describe 'Show all items', ->
+
+		describe 'Show completed items', ->
+
+		describe 'Show uncompleted items', ->
+
+		describe 'Swap completed  items', ->
+
+	describe 'User actions', ->
 
