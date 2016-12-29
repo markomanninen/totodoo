@@ -32,7 +32,7 @@ describe 'Totodoo App', ->
 			@timeout 4000, done()
 
 		it 'is the lenght of the default list items = 2', (done) ->
-			len = @driver.findElement(js: 'return document.getElementById("todo-list").getElementsByTagName('li').length')
+			len = @driver.findElement(js: 'return document.getElementById("todo-list").getElementsByTagName("li").length')
 			expect(len).to.eventually.equal 2
 			@timeout 4000, done()
 
