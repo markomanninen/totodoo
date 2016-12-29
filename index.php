@@ -48,7 +48,7 @@ $jwtGETResponse = isset($_GET['jwtResponse']) ? $_GET['jwtResponse'] : "eyJ0eXAi
 <html>
     <head lang="en">
         <meta charset="UTF-8">
-        <title>totodoo</title>
+        <title>Totodoo App</title>
 
         <link rel="stylesheet" href="./bower_components/bootstrap/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="./bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
