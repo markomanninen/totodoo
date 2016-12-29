@@ -30,14 +30,14 @@ describe 'Totodoo App', ->
 			@driver.wait((()-> drvr.executeScript('return document.readyState')), 10000).then ()->
 				text = drvr.findElement(id: 'listName').getText()
 				expect(text).to.eventually.equal 'Public list 1'
-				@timeout 4000, done()
+				done()
 
 		it 'is the length of the default list items = 2', (done) ->
 			drvr = @driver
 			@driver.wait((()-> drvr.executeScript('return document.readyState')), 10000).then ()->
-				lis = drvr.findElement(id: 'todo-list').findElements(tagName: 'li')
-				expect(lis.size()).to.eventually.equal 2
-				@timeout 4000, done()
+				lis = alement.all(drvr.findElement(id: 'todo-list').findElements(tagName: 'li'))
+				expect(lis.count()).to.eventually.equal 2
+				done()
 
 	describe 'List actions', ->
 
