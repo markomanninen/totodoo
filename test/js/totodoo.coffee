@@ -27,6 +27,7 @@ describe 'Totodoo App', ->
 
 		it 'is the name of the default list', (done) ->
 			text = @driver.findElement(id: 'listName').getText()
+			@driver.wait(-> @driver.isElementPresent @driver.findElement(id: 'todo-list').findElement(tagName: 'li'), 10000)
 			expect(text).to.eventually.equal 'Public list 1'
 			@timeout 10000, done()
 
