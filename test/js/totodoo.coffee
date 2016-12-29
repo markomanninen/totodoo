@@ -19,31 +19,37 @@ describe 'Totodoo App', ->
 	beforeEach ->
 		@driver.get 'http://127.0.0.1/'
 
-	describe 'Init', ->
+	describe 'Init: Title', ->
 
-		describe 'Title', ->
+		it 'has the title of the application in the window\'s title', (done) ->
+			expect(@driver.getTitle()).to.eventually.contain 'Totodoo App'
+			@timeout 4000, done()
 
-			it 'has the title of the application in the window\'s title', (done) ->
-				expect(@driver.getTitle()).to.eventually.contain 'Totodoo App'
-				@timeout 4000, done()
+	describe 'Init: Default list', ->
 
-		describe 'Default list', ->
+		it 'is the name of the default list', (done) ->
+			text = @driver.findElement(id: 'listName').getText()
+			expect(text).to.eventually.equal 'Public list 1'
+			@timeout 4000, done()
 
-			it 'is the name of the default list', (done) ->
-				text = @driver.findElement(js: 'return document.getElementById("listName")').getText()
-				expect(text).to.eventually.equal 'Public list 1'
-				@timeout 4000, done()
+	describe 'Init: Default list items', ->
 
-		describe 'Default list items count', ->
-
-			it 'is the lenght of the default list items = 2', (done) ->
-				lis = @driver.findElements(js: 'return document.getElementById("todo-list").getElementsByTagName("li")')
-				expect(lis.count()).to.eventually.equal 2
-				@timeout 4000, done()
+		it 'is the lenght of the default list items = 2', (done) ->
+			ul = @driver.findElement(id: 'todo-list')
+			lis = ul.findElements(tagName: 'li')
+			expect(lis.count()).to.eventually.equal 2
+			@timeout 4000, done()
 
 	describe 'List actions', ->
 
 		describe 'Select private list', ->
+
+			it 'is the name of the private list after click', (done) ->
+				listName = 'Private list 1'
+				@driver.findElement(linkText: listName).click()
+				text = @driver.findElement(id: 'listName').getText()
+				expect(text).to.eventually.equal listName
+				@timeout 4000, done()
 
 		describe 'Create list', ->
 
