@@ -22,13 +22,7 @@ describe 'Totodoo App', ->
 	describe 'Init', ->
 
 		it 'has the title of the application in the window\'s title', (done) ->
-			expect(@driver.getTitle()).to.eventually.contain
-			'Totodoo App'
-			@timeout 4000, done()
-
-		it 'is the name of the default list', (done) ->
-			text = @driver.findElement(js: 'return document.getElementById("listName")').getText()
-			expect(text).to.eventually.equal 'Public list 1'
+			expect(@driver.getTitle()).to.eventually.contain 'Totodoo App'
 			@timeout 4000, done()
 
 		it 'is the lenght of the default list items = 2', (done) ->
