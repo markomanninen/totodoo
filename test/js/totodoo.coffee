@@ -31,17 +31,14 @@ describe 'Totodoo App', ->
 			expect(text).to.eventually.equal 'Public list 1'
 			@timeout 4000, done()
 
+		it 'is the lenght of the default list items = 2', (done) ->
+			lis = @driver.findElements(js: 'return document.getElementById("todo-list").getElementsByTagName("li")')
+			expect(lis.length).to.eventually.equal 2
+			@timeout 4000, done()
 
 	describe 'List actions', ->
 
 		describe 'Select private list', ->
-
-			it 'is the name of the private list after click', (done) ->
-			listName = 'Private list 1'
-			@driver.findElement(linkText: listName).click()
-			text = @driver.findElement(js: 'return document.getElementById("listName")').getText()
-			expect(text).to.eventually.equal listName
-			@timeout 4000, done()
 
 		describe 'Create list', ->
 
