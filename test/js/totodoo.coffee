@@ -31,10 +31,6 @@ describe 'Totodoo App', ->
 			expect(text).to.eventually.equal 'Public list 1'
 			@timeout 4000, done()
 
-		it 'is the lenght of the default list items = 2', (done) ->
-			lis = @driver.findElement(js: 'return document.getElementById("todo-list")')
-			expect(lis.getElementsByTagName("li").length).to.eventually.equal 2
-			@timeout 4000, done()
 
 	describe 'List actions', ->
 
