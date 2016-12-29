@@ -16,7 +16,7 @@ describe 'Totodoo App', ->
 
 	describe 'Init', ->
 
-		@timeout 12000
+		@timeout 38000
 
 		beforeEach ->
 			@driver.get 'http://127.0.0.1/'
@@ -28,13 +28,13 @@ describe 'Totodoo App', ->
 		it 'is the name of the default list', (done) ->
 			text = @driver.findElement(id: 'listName').getText()
 			expect(text).to.eventually.equal 'Public list 1'
-			@timeout 4000, done()
+			@timeout 10000, done()
 
 		it 'is the lenght of the default list items = 2', (done) ->
 			ul = @driver.findElement(id: 'todo-list')
 			lis = ul.findElements(tagName: 'li')
 			expect(lis.count()).to.eventually.equal 2
-			@timeout 4000, done()
+			@timeout 10000, done()
 
 	describe 'List actions', ->
 
@@ -48,9 +48,15 @@ describe 'Totodoo App', ->
 			@driver.findElement(linkText: listName).click()
 			text = @driver.findElement(id: 'listName').getText()
 			expect(text).to.eventually.equal listName
-			@timeout 4000, done()
+			@timeout 10000, done()
 
-		describe 'Select private list', ->
+		it 'is the name of the public list after change', (done) ->
+			listName = 'Public list 1'
+			el = @driver.findElement(id: 'listName')
+			@driver.executeScript("arguments[0].setAttribute('value', arguments[1])", el, 'PUBLIC LIST 1')
+			text = @driver.findElement(id: 'id1').findElement(tagName: 'a').getText()
+			expect(text).to.eventually.equal 'PUBLIC LIST 1'
+			@timeout 4000, done()
 
 		describe 'Create list', ->
 
