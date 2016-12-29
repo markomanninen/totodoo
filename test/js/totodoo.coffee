@@ -26,18 +26,16 @@ describe 'Totodoo App', ->
 			@timeout 4000, done()
 
 		it 'is the name of the default list', (done) ->
-			driver = @driver
-			@driver.wait(-> not driver.findElement(id: 'todo-list').findElement(tagName: 'li').isPresent(), 10000)
-			text = @driver.findElement(id: 'listName').getText()
-			expect(text).to.eventually.equal 'Public list 1'
-			@timeout 10000, done()
+			@driver.wait((()-> @driver.executeScript('return document.readyState')), 10000).then ()->
+				text = @driver.findElement(id: 'listName').getText()
+				expect(text).to.eventually.equal 'Public list 1'
+				@timeout 10000, done()
 
 		it 'is the length of the default list items = 2', (done) ->
-			driver = @driver
-			@driver.wait(-> not driver.findElement(id: 'todo-list').findElement(tagName: 'li').isPresent(), 10000)
-			lis = @driver.findElement(id: 'todo-list').findElements(tagName: 'li')
-			expect(lis.size()).to.eventually.equal 2
-			@timeout 10000, done()
+			@driver.wait((()-> @driver.executeScript('return document.readyState')), 10000).then ()->
+				lis = @driver.findElement(id: 'todo-list').findElements(tagName: 'li')
+				expect(lis.size()).to.eventually.equal 2
+				@timeout 10000, done()
 
 	describe 'List actions', ->
 
@@ -47,19 +45,21 @@ describe 'Totodoo App', ->
 			@driver.get 'http://127.0.0.1/'
 
 		it 'is the name of the private list after click', (done) ->
-			listName = 'Private list 1'
-			@driver.findElement(linkText: listName).click()
-			text = @driver.findElement(id: 'listName').getText()
-			expect(text).to.eventually.equal listName
-			@timeout 10000, done()
+			@driver.wait((()-> @driver.executeScript('return document.readyState')), 10000).then ()->
+				listName = 'Private list 1'
+				@driver.findElement(linkText: listName).click()
+				text = @driver.findElement(id: 'listName').getText()
+				expect(text).to.eventually.equal listName
+				@timeout 10000, done()
 
 		it 'is the name of the public list after change', (done) ->
-			listName = 'Public list 1'
-			el = @driver.findElement(id: 'listName')
-			@driver.executeScript("arguments[0].setAttribute('value', arguments[1])", el, 'PUBLIC LIST 1')
-			text = @driver.findElement(id: 'id1').findElement(tagName: 'a').getText()
-			expect(text).to.eventually.equal 'PUBLIC LIST 1'
-			@timeout 4000, done()
+			@driver.wait((()-> @driver.executeScript('return document.readyState')), 10000).then ()->
+				listName = 'PUBLIC LIST 1'
+				el = @driver.findElement(id: 'listName')
+				@driver.executeScript("arguments[0].setAttribute('value', arguments[1])", el, listName)
+				text = @driver.findElement(id: 'id1').findElement(tagName: 'a').getText()
+				expect(text).to.eventually.equal listName
+				@timeout 4000, done()
 
 		describe 'Create list', ->
 
@@ -73,20 +73,18 @@ describe 'Totodoo App', ->
 			@driver.get 'http://127.0.0.1/'
 
 		it 'is the length of the completd items = 1', (done) ->
-			@driver.findElement(linkText: 'Completed').click()
-			driver = @driver
-			@driver.wait(-> not driver.findElement(id: 'todo-list').findElement(tagName: 'li').isPresent(), 10000)
-			lis = @driver.findElement(id: 'todo-list').findElements(tagName: 'li')
-			expect(lis.size()).to.eventually.equal 1
-			@timeout 10000, done()
+			@driver.wait((()-> @driver.executeScript('return document.readyState')), 10000).then ()->
+				@driver.findElement(linkText: 'Completed').click()
+				lis = @driver.findElement(id: 'todo-list').findElements(tagName: 'li')
+				expect(lis.size()).to.eventually.equal 1
+				@timeout 10000, done()
 
 		it 'is the length of the active items = 1', (done) ->
-			@driver.findElement(linkText: 'Active').click()
-			driver = @driver
-			@driver.wait(-> not driver.findElement(id: 'todo-list').findElement(tagName: 'li').isPresent(), 10000)
-			lis = @driver.findElement(id: 'todo-list').findElements(tagName: 'li')
-			expect(lis.size()).to.eventually.equal 1
-			@timeout 10000, done()
+			@driver.wait((()-> @driver.executeScript('return document.readyState')), 10000).then ()->
+				@driver.findElement(linkText: 'Active').click()
+				lis = @driver.findElement(id: 'todo-list').findElements(tagName: 'li')
+				expect(lis.size()).to.eventually.equal 1
+				@timeout 10000, done()
 
 		describe 'Add item', ->
 
