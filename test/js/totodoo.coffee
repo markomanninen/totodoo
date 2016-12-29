@@ -38,7 +38,7 @@ describe 'Totodoo App', ->
 
 			it 'is the lenght of the default list items = 2', (done) ->
 				lis = @driver.findElements(js: 'return document.getElementById("todo-list").getElementsByTagName("li")')
-				expect(lis.length).to.eventually.equal 2
+				expect(lis.count()).to.eventually.equal 2
 				@timeout 4000, done()
 
 	describe 'List actions', ->
