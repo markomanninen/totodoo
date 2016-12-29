@@ -16,7 +16,7 @@ describe 'Totodoo App', ->
 
 	describe 'Init', ->
 
-		@timeout 38000
+		@timeout 12000
 
 		beforeEach ->
 			@driver.get 'http://127.0.0.1/'
@@ -26,16 +26,18 @@ describe 'Totodoo App', ->
 			@timeout 4000, done()
 
 		it 'is the name of the default list', (done) ->
-			@driver.wait((()-> @driver.executeScript('return document.readyState')), 10000).then ()->
-				text = @driver.findElement(id: 'listName').getText()
+			drvr = @driver
+			@driver.wait((()-> drvr.executeScript('return document.readyState')), 10000).then ()->
+				text = drvr.findElement(id: 'listName').getText()
 				expect(text).to.eventually.equal 'Public list 1'
-				@timeout 10000, done()
+				@timeout 4000, done()
 
 		it 'is the length of the default list items = 2', (done) ->
-			@driver.wait((()-> @driver.executeScript('return document.readyState')), 10000).then ()->
-				lis = @driver.findElement(id: 'todo-list').findElements(tagName: 'li')
+			drvr = @driver
+			@driver.wait((()-> drvr.executeScript('return document.readyState')), 10000).then ()->
+				lis = drvr.findElement(id: 'todo-list').findElements(tagName: 'li')
 				expect(lis.size()).to.eventually.equal 2
-				@timeout 10000, done()
+				@timeout 4000, done()
 
 	describe 'List actions', ->
 
