@@ -27,12 +27,14 @@ describe 'Totodoo App', ->
 
 		it 'is the name of the default list', (done) ->
 			driver = @driver
+			@driver.wait(-> not driver.findElement(id: 'todo-list').findElement(tagName: 'li').isPresent(), 10000)
 			text = @driver.findElement(id: 'listName').getText()
-			@driver.wait(-> driver.isElementPresent driver.findElement(id: 'todo-list').findElement(tagName: 'li'), 10000)
 			expect(text).to.eventually.equal 'Public list 1'
 			@timeout 10000, done()
 
 		it 'is the length of the default list items = 2', (done) ->
+			driver = @driver
+			@driver.wait(-> not driver.findElement(id: 'todo-list').findElement(tagName: 'li').isPresent(), 10000)
 			lis = @driver.findElement(id: 'todo-list').findElements(tagName: 'li')
 			expect(lis.size()).to.eventually.equal 2
 			@timeout 10000, done()
@@ -72,12 +74,16 @@ describe 'Totodoo App', ->
 
 		it 'is the length of the completd items = 1', (done) ->
 			@driver.findElement(linkText: 'Completed').click()
+			driver = @driver
+			@driver.wait(-> not driver.findElement(id: 'todo-list').findElement(tagName: 'li').isPresent(), 10000)
 			lis = @driver.findElement(id: 'todo-list').findElements(tagName: 'li')
 			expect(lis.size()).to.eventually.equal 1
 			@timeout 10000, done()
 
 		it 'is the length of the active items = 1', (done) ->
 			@driver.findElement(linkText: 'Active').click()
+			driver = @driver
+			@driver.wait(-> not driver.findElement(id: 'todo-list').findElement(tagName: 'li').isPresent(), 10000)
 			lis = @driver.findElement(id: 'todo-list').findElements(tagName: 'li')
 			expect(lis.size()).to.eventually.equal 1
 			@timeout 10000, done()
