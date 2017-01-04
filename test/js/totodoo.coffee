@@ -22,5 +22,5 @@ describe 'Totodoo App', ->
 			@driver.get 'http://127.0.0.1/'
 
 		it 'has the title of the application in the window\'s title', (done) ->
-			expect(@driver.getTitle()).to.eventually.contain 'Totodoo App'
-			@timeout 4000, done()
+			expect(@driver.getTitle()).to.eventually.contain 'Totodoo - Sample todo application with StormPath user management service'
+			@timeout 12000, done()
