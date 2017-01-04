@@ -1,3 +1,4 @@
+/* style based on http://todomvc.com/ */
 button {
 	margin: 0;
 	padding: 0;
@@ -19,9 +20,12 @@ button {
 	font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	line-height: 1.4em;
 	color: #4d4d4d;
+	/*
 	min-width: 230px;
 	max-width: 550px;
+	*/
 	margin: 0 auto;
+	padding: 0 10%;
 	-webkit-font-smoothing: antialiased;
 	-moz-font-smoothing: antialiased;
 	font-smoothing: antialiased;
@@ -64,9 +68,7 @@ input[type="checkbox"] {
 }
 
 #todoapp #header > h1 {
-    position: absolute;
-    top: -155px;
-    width: 95%;
+	margin-top: -130px;
     font-size: 500%;
     text-align: center;
     color: rgba(175, 47, 47, 0.15);
@@ -201,6 +203,7 @@ label[for='toggle-all'] {
 	text-decoration: line-through;
 }
 
+/*#todo-list li .sort,*/
 #todo-list li .destroy {
 	display: none;
 	position: absolute;
@@ -227,6 +230,20 @@ label[for='toggle-all'] {
 #todo-list li:hover .destroy {
 	display: block;
 }
+
+/*
+#todo-list li .sort:hover {
+	color: #af5b5e;
+}
+
+#todo-list li .sort:after {
+	content: '|';
+}
+
+#todo-list li:hover .sort {
+	display: block;
+}
+*/
 
 #todo-list li .edit {
 	display: none;
@@ -372,9 +389,93 @@ html #clear-completed:active {
     margin: 0;   
 }
 
+h1 .doubleClicked {
+    padding: 0 10px;
+}
+
 .doubleClicked {
     border: 1px solid #aaa;
-    padding: 8px 8px;
+    border-bottom: 1px solid #eee;
+    border-right: 1px solid #eee;
+    padding: 8px 8px 8px 8px;
     margin: -9px -9px;
 	outline: none;
+}
+
+.editable {
+	outline: none;
+}
+
+.dropdown-menu > .disabled {
+	cursor: not-allowed; 
+}
+
+.dropdown-menu > .disabled > a {
+	pointer-events: none;
+}
+
+[data-bind] {
+	cursor: text;
+}
+
+.completed [data-bind] {
+	cursor: default;
+}
+
+input[type="checkbox"],
+input[type="checkbox"]:checked,
+ul#todo-lists li [data-bind] {
+	cursor: pointer;
+}
+
+/*
+[contenteditable="true"].single-line {
+    white-space: nowrap;
+    width:200px;
+    overflow: hidden;
+} 
+
+[contenteditable="true"].single-line br {
+    display:none;
+}
+
+[contenteditable="true"].single-line * {
+    display:inline;
+    white-space:nowrap;
+}
+*/
+
+/* NOTIFICATIONS */
+
+#sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+#sortable li { margin: 0 5px 5px 5px; padding: 5px; font-size: 1.2em; height: 1.5em; }
+html>body #sortable li { height: 1.5em; line-height: 1.2em; }
+
+.ui-state-highlight {height: inherit; line-height: inherit; background-color: yellow}
+
+@import url(http://fonts.googleapis.com/css?family=Old+Standard+TT:400,700);
+
+[data-notify="container"][class*="alert-pastel-"] {
+	background-color: rgb(255, 255, 238);
+	border-width: 0px;
+	border-left: 15px solid rgb(255, 240, 106);
+	border-radius: 0px;
+	box-shadow: 0px 0px 5px rgba(51, 51, 51, 0.3);
+	font-family: 'Old Standard TT', serif;
+	letter-spacing: 1px;
+}
+[data-notify="container"].alert-pastel-info {
+	border-left-color: rgb(255, 179, 40);
+}
+[data-notify="container"].alert-pastel-danger {
+	border-left-color: rgb(255, 103, 76);
+}
+[data-notify="container"][class*="alert-pastel-"] > [data-notify="title"] {
+	color: rgb(80, 80, 57);
+	display: block;
+	font-weight: 700;
+	margin-bottom: 5px;
+}
+[data-notify="container"][class*="alert-pastel-"] > [data-notify="message"] {
+	font-weight: 400;
 }

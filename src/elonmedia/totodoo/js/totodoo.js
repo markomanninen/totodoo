@@ -1,47 +1,439 @@
-function totodoo(data) {
+function notificationcenter(data) {
+
+	var adder = {
+
+        'add': function(value, model, property, property_stack, parent) {
+        	/*
+            console.log(
+            	'add',
+				value, // what was added
+				property != undefined ? property : "undefined", // index of the additive operation
+				model.value, // what is left after additition
+				this.path.join('.') // path of the additive operation
+			);
+			*/
+            amplify.request( "post", {value: value, path: this.path}, 
+            	function(response) {
+            		// should not lift up notification because of infinite loop!
+                	console.log(response);
+            	}
+            );
+			
+            return value;
+        }
+    };
+
+    var obs = BaseModelObserver();
+    var mvt = ModelValueTriggers(obs);
+	obs.triggers.defines(mvt.valueTriggers);
+    obs.triggers.defines(adder);
+    // at the moment array as a root model seems not to work
+    // thats why using notifications attribute on model root
+    var center = obs.createModel({notifications: data || []});
+	
+	/*
+	{
+		message: "",
+		time: iso8601,
+		tags: ["system", "user", "login", 
+			   "logout", "todo-list" "todo-item", 
+			   "publicLists", "privateLists", "sharedLists", "..."],
+		user: null
+	}
+	*/
+	
+	//var latest_notification = notifications.length ? notifications[notifications.length-1] : {};
+
+	this.push = function(message, tags, growl_props) {
+
+		center.notifications.push(
+			{
+				id: guid(),
+				message: message, 
+				tags: tags, 
+				timestamp: getTimestamp()
+			}
+		);
+
+		// add notifications to the menulist + increase number / add first number badge...
+
+		if (growl_props) {
+			 return $.notify(growl_props.options, growl_props.settings);
+		}
+	}
+
+	this.get = function(filter_func) {
+		return filter_func ? center.notifications.filter(filter_func) : center.notifications;
+	}
+
+	return {push: this.push, get: this.get};
+}
+
+function totodoo(data, loggedUser) {
 
 	$('body').on('focus', '[contenteditable]', function() {
 	    var $this = $(this);
 	    $this.data('before', $this.html());
 	    return $this;
-	}).on('blur keyup paste input', '[contenteditable]', function() {
+	}).on('blur', '[contenteditable]', function() {
 	    var $this = $(this);
+	    if ($this.text().trim() == '') {
+	    	$this.html($this.data('before'));
+	    }
 	    if ($this.data('before') !== $this.html()) {
 	        $this.data('before', $this.html());
 	        $this.trigger('change');
 	    }
 	    return $this;
+	}).on('keypress', '[contenteditable]', function(e) {
+		var $this = $(this);
+    	if (e.which == 13) {
+    		if ($this.text().trim() == '') {
+    			$this.html($this.data('before'));
+    		}
+        	$this.trigger('blur');
+        }
 	});
+	/*.on('_click _dblclick', '[contenteditable]', function(e) {
+        var caretRange = getMouseEventCaretRange(e);
+		// Set a timer to allow the selection to happen and the dust settle first
+		window.setTimeout(function() {
+			selectRange(caretRange);
+		}, 10);
+		return false;
+    });
+	*/
 
+	$('#myForm').on('submit', function(e) {
+        e.preventDefault();
+        var name = $('#name');
+        var str = parseString(name.val());
+        // Check if there is an entered value
+        if (!str) {
+          // Add errors highlight
+          name.closest('.form-group').removeClass('has-success').addClass('has-error');
+        
+        } else {
+          // Remove the errors highlight
+          name.closest('.form-group').removeClass('has-error').addClass('has-success');
+          
+          var key = "privateLists";
+          
+          lists[key].push({id: guid(), name: str, items: []});
+
+          var m = lists[key][lists[key].length-1];
+
+          var ul = $('ul#todo-lists ul#privateLists');
+          
+          $('ul#todo-lists li li.active').removeClass('active');
+
+          ul.append('<li id="'+m.id.value+'" class="active" type="'+key+'"><a data-bind="'+m.path.join('.')+'.name" href="#"><span class="glyphicon glyphicon-list"> '+m.name.value+'</span></a></li>');
+          
+          addChangeListTriggers();
+
+          $('#addNewList').modal('hide');
+
+          name.val('');
+
+          name.closest('.form-group').removeClass('has-success');
+
+        }
+    });
+
+/*
+function getMouseEventCaretRange(evt) {
+    var range, x = evt.clientX, y = evt.clientY;
+
+    // Try the simple IE way first
+    if (document.body.createTextRange) {
+        range = document.body.createTextRange();
+        range.moveToPoint(x, y);
+    }
+
+    else if (typeof document.createRange != "undefined") {
+        // Try Mozilla's rangeOffset and rangeParent properties,
+        // which are exactly what we want
+        if (typeof evt.rangeParent != "undefined") {
+            range = document.createRange();
+            range.setStart(evt.rangeParent, evt.rangeOffset);
+            range.collapse(true);
+        }
+
+        // Try the standards-based way next
+        else if (document.caretPositionFromPoint) {
+            var pos = document.caretPositionFromPoint(x, y);
+            range = document.createRange();
+            range.setStart(pos.offsetNode, pos.offset);
+            range.collapse(true);
+        }
+
+        // Next, the WebKit way
+        else if (document.caretRangeFromPoint) {
+            range = document.caretRangeFromPoint(x, y);
+        }
+    }
+
+    return range;
+}
+
+function selectRange(range) {
+    if (range) {
+        if (typeof range.select != "undefined") {
+            range.select();
+        } else if (typeof window.getSelection != "undefined") {
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }
+    }
+}
+*/
+	$( "#todo-list" ).sortable(
+        {
+        	cancel: ':input,button,[contenteditable]',
+            start: function(event, ui) {
+                    var start_pos = ui.item.index();
+                    ui.item.data('start_pos', start_pos);
+            },
+            update: function (event, ui) {
+                    
+                    var start_pos = ui.item.data('start_pos');
+                    var end_pos = ui.item.index();
+
+                    // reversing start and end position
+                    start_pos = Math.abs(start_pos - selectedList.items.length+1);
+                    end_pos = Math.abs(end_pos - selectedList.items.length+1);
+                    selectedList.items.move(start_pos, 1, end_pos);
+
+                    var a = $('[data-bind^="'+selectedList.items[start_pos].path.join('.')+'"]');
+                    var b = $('[data-bind^="'+selectedList.items[end_pos].path.join('.')+'"]');
+
+                    a.each(function(i, item) {
+                    	var db = $(item).attr('data-bind');
+                    	$(item).attr('data-bind', db.replace(
+                    		selectedList.items[start_pos].path.join('.'), 
+                    		selectedList.items[end_pos].path.join('.')
+                    	));
+                    });
+                    
+                    b.each(function(i, item) {
+                    	var db = $(item).attr('data-bind');
+                    	$(item).attr('data-bind', db.replace(
+                    		selectedList.items[end_pos].path.join('.'), 
+                    		selectedList.items[start_pos].path.join('.')
+                    	));
+                    });
+
+                    loadItems();
+
+                    $('a[href="'+location.hash+'"]').trigger('click');
+            }
+        }
+    );
+
+	// TODO: double clicking contenteditable fields gives unexpected behaviour...
+	// 
+    //$( "#todo-list" ).disableSelection();
+    
 	var selectedList;
-
     var obs = BaseModelObserver();
-    //var moh = ModelObserverHandlers(obs);
-    var moh = ModelValueTriggers(obs);
-    //obs.handler.define(moh.valueHandler);
-    obs.triggers.defines(moh.valueTriggers);
+    var mvt = ModelValueTriggers(obs);
+	obs.triggers.defines(mvt.valueTriggers);
+
+    function mergeConfig(to, from) {
+        for (var n in from)
+            if (typeof to[n] != 'object')
+                to[n] = from[n];
+            else if (typeof from[n] == 'object')
+                to[n] = mergeConfig(to[n], from[n]);
+        return to;
+    }
+
+    function defineProperty(obj, property, config, get, set) {
+        var value = obj[property] || obj['updated'] || obj['created'];
+        var config = mergeConfig({enumerable: true, configurable: true}, config || {});
+        config['get'] = get || function() {return this.updated || value || this.created};
+        config['set'] = set || function(new_value) {value = new_value};
+        Object.defineProperty(obj, property, config);
+    }
+
+    function defineProperty2(obj, property) {
+        var value = obj[property];
+        Object.defineProperty(obj, property, {
+        	enumerable: true, configurable: true,
+        	get: function() {return value},
+        	set: function(new_value) {value = new_value}
+        });
+    }
 
     var logger = {
-        init: function(value, model, property, property_stack, parent) {
+        'init': function(value, model, property, property_stack, parent) {
             //console.log(["init", value, model, property, property_stack.join('.'), parent]);
+            // timestamp
+            if (model.hasOwnProperty('completed')) {
+	        	defineProperty(model, 'timestamp'); // updateAt?
+	        	/*
+	        	model['order'] = 1;
+	        	defineProperty2(model, 'order');
+	        	*/
+	        }
             return value;
         },
-        get: function(value, property_stack) {
+        'get': function(value, property_stack) {
             //console.log(["get", value, property_stack.join('.')]);
             return value;
         },
-        set: function(value, old_value, property_stack) {
-            console.log(["set", value, old_value, property_stack.join('.')]);
+        // set aka update aka edit aka put
+        'set': function(value, old_value, property_stack) {
+            // move, swap, reorder, delete happening?!
+            if (this.arrayMutation) {
+                return value;
+            }
+
+            var path = this.path.slice();
+            path.push(property_stack[property_stack.length-1]);
+/*
+            console.log(
+            	'set',
+				value.value,
+				this.key,
+				value.old_value,
+				this.path.join('.'), // path of the removal operation
+				property_stack.join('.'),
+				path.join('.')
+			);
+*/
+            amplify.request( "put", //save
+           		{
+           			value: value.value, 
+           			path: path
+           		}, 
+            	function(response) {
+                	var message = sprintf("Updated %s. %s set to '%s'", "todo list/todo list item", path.join(' > '), value.value);
+					notcen.push(message, ['lists', 'modify', path[1]], {options: {title: "Update", message: message}, settings: {}});
+            	}
+            );
+
+            return value;
+        },
+        // add aka post
+        'add': function(value, model, property, property_stack, parent) {
+        	
+        	/*
+            console.log(
+            	'add',
+				value, // what was added
+				typeof property != "undefined" ? property : "undefined", // index of the additive operation
+				model.value, // what is left after additition
+				this.path.join('.') // path of the additive operation
+			);
+			*/
+
+			var path = this.path.slice();
+
+            amplify.request( "post", 
+           		{
+           			value: value, 
+           			path: path
+           		}, 
+            	function(response) {
+                	//console.log(response);
+                	var message = sprintf("Added new item '%s' to '%s'.", value[0].name.value, path[1]);
+					notcen.push(message, ['lists', 'add', path[1]], {options: {title: "Add", message: message}, settings: {}});
+            	}
+            );
+
+            return value;
+        },
+        // remove aka delete
+        'remove': function(value, model, property, property_stack, parent) {
+
+        	var val = value.map(function(v){return v.value;});
+/*
+            console.log(
+            	'remove',
+				val, // what was removed
+				typeof property != "undefined" ? property : "undefined", // index of the removal operation
+				model.value, // what is left after removal
+				this.path.join('.') // path of the removal operation
+			);
+*/
+			var path = this.path.slice();
+
+            amplify.request( "delete", 
+           		{
+           			value: val, 
+           			path: path
+           		}, 
+            	function(response) {
+                	var message = sprintf("Removed item '%s' from '%s'.", value[0].name.value, path[1]);
+					notcen.push(message, ['lists', 'remove', path[1]], {options: {title: "Remove", message: message}, settings: {}});
+            	}
+            );
+
+            return value;
+        },
+        // order aka rearrange
+        'order': function(value, model, property_stack) {
+
+        	var val;
+
+        	if (value[0] == 'swap') {
+
+        	}
+        	// only move supported at the moment
+        	if (value[0] == 'move') {
+        		val = value[5];
+        	}
+        	if (value[0] == 'reorder') {
+        		
+        	}
+/*
+            console.log(
+            	'order',
+				value[0], // order type
+				value, // order type
+				val, // order parameters
+				model.value, // what is left after removal
+				this.path.join('.') // path of the removal operation
+			);
+*/
+			var path = this.path.slice();
+
+            if (val) {
+	            amplify.request( "order", 
+	           		{
+	           			value: val, 
+	           			path: path
+	           		}, 
+	            	function(response) {
+	                	//console.log(response);
+                		var message = sprintf("Changed the order of items in '%s'.", path[1]);
+						notcen.push(message, ['lists', 'order', path[1]], {options: {title: "Order", message: message}, settings: {}});
+	            	}
+	            );
+        	}
+			
             return value;
         }
     };
 
     // add new log handler upon valueHandler!
 
-    //obs.handler.define(logger);
     obs.triggers.defines(logger);
 
     var lists = obs.createModel(data);
+
+    var notcen;
+
+    amplify.request( "get", 
+    	{
+    		path: ['root', 'notifications']
+    	},
+    	function( notifications ) {
+        	notcen = notificationcenter(notifications['val']);
+    	}
+    );
 
 	init();
 
@@ -70,10 +462,13 @@ function totodoo(data) {
 		// item add field
 		$('input#new-todo').keypress(function(e) {
 	        if (e.which == 13) {
-	        	var id = guid();
-	        	var item = addItemtoModel($(this).val(), id);
-	            addNewTodoItem($(this).val(), id, false, item.path.join('.'));
-	            $(this).val('');
+	        	var str = parseString($(this).val());
+	        	if (str) {
+		        	var id = guid();
+		        	var item = addItemtoModel($(this).val(), id);
+		            addNewTodoItem($(this).val(), id, false, item.path.join('.'));
+		            $(this).val('');
+	            }
 	        }
 	    });
 	}
@@ -164,8 +559,8 @@ function totodoo(data) {
 	function removeFromModel(item) {
         for (var i in selectedList.items) {
             if (item.attr('data-id') == selectedList.items[i].id.value) {
-                selectedList.items[i] = null;
-                delete selectedList.items[i];
+            	//console.log(selectedList.items[i], item.attr('data-id'));
+                selectedList.items.remove(i);
                 item.remove();
             }
         }
@@ -223,7 +618,7 @@ function totodoo(data) {
         	var properties = path.split('.');
     		properties.shift();
     		var model = getNode(lists, properties);
-            model.name = $('[data-bind="'+path+'.name"]').text();
+            model.name = $('[data-bind="'+path+'.name"]').html();
         });
 
 	    initItems();
@@ -238,8 +633,8 @@ function totodoo(data) {
 
 	function addItemtoModel(item, dataid, completed) {
 		dataid = dataid || guid();
-		completed = completed || false;
-        var model = {id: dataid, name: item, completed: completed};
+		completed = completed || false;
+        var model = {id: dataid, name: item, completed: completed, timestamp: getTimestamp()};
         selectedList.items.push(model);
     	return selectedList.items[selectedList.items.length-1];
 	}
@@ -260,6 +655,7 @@ function totodoo(data) {
 
     function loadItems() {
         $('ul#todo-list li').remove();
+        //selectedList.items.reverse();
         for (var i in selectedList.items) {
             var m = selectedList.items[i];
             addNewTodoItem(m.name.value, m.id.value, m.completed.value, m.path.join('.'));
@@ -273,9 +669,9 @@ function totodoo(data) {
         selectList();
         // load items
         loadItems();
-        $('ul#todo-lists li a').unbind('click');
-        $('ul#todo-lists li a').click(function() {
-            $('ul#todo-lists li a').parent().removeClass('active');
+        //$('ul#todo-lists li a:not([data-toggle="modal"])').unbind('click');
+        $('ul#todo-lists li li a:not([data-toggle="modal"])').click(function() {
+            $('ul#todo-lists li li.active a').parent().removeClass('active');
             $(this).parent().addClass('active');
             todoTitleName();
             selectList();
@@ -284,30 +680,47 @@ function totodoo(data) {
     }
 
     function todoTitleName() {
-        var li = $('ul#todo-lists li.active');
-        var span = $('span#listName');
-        span.text(li.text());
-        span.attr('data-bind', li.find('a').attr('data-bind'));
+        var $li = $('ul#todo-lists li li.active');
+        var $span = $('span#listName');
+        $span.html($('a span', $li).html().trim());
+        $span.attr('data-bind', $li.find('a').attr('data-bind'));
         
-        span.unbind('change');
-        span.change(function() {
-        	var properties = $(this).attr('data-bind').split('.');
+        $span.unbind('change');
+        $span.change(function() {
+        	var $this = $(this);
+        	var properties = $this.attr('data-bind').split('.');
     		properties.shift();
-    		var model = getNode(lists, properties);
-            model.name = $(this).text();
-            li.find('a').text($(this).text());
+    		model = getNode(lists, properties);
+            model.parent.name = $this.html();
+            $li.find('a span').html(' ' + $this.html()); 
         });
     }
-
-    function createTodoListItem(ul, key, divider, name, state) {
+/*
+    function _createTodoListItem(ul, key, divider, name, state) {
         var model = lists[key];
         if (model && model.length) {
             var div = divider ? '<li class="divider"></li>' : '';
-            ul.append(div+'<li class="dropdown-header">'+name+'</li>');
+            ul.append(div+'<li class="dropdown-header '+key+'">'+name+'</li>');
             for (var i in model) {
                 var m = model[i];
                 var className = state.active ? ' class="active"' : '';
-                ul.append('<li id="'+m.id.value+'"'+className+' type="'+key+'"><a data-bind="'+m.path.join('.')+'.name" href="#">'+m.name.value+'</a></li>');
+                ul.append('<li id="'+m.id.value+'"'+className+' type="'+key+'"><a data-bind="'+m.path.join('.')+'.name" href="#"><span class="glyphicon glyphicon-list"> '+m.name.value+'</span></a></li>');
+                state.active = false;
+            }
+        }
+    }
+*/
+    function createTodoListItem(ul, key, divider, name, state) {
+        var model = lists[key];
+        var ul = $('ul#'+key);
+                
+        if (model && model.length) {
+            //var div = divider ? '<li class="divider"></li>' : '';
+            //ul.append(div+'<li class="dropdown-header '+key+'">'+name+'</li>');
+            for (var i in model) {
+                var m = model[i];
+                var className = state.active ? ' class="active"' : '';
+                ul.append('<li id="'+m.id.value+'"'+className+' type="'+key+'"><a tabindex="'+i+'" data-bind="'+m.path.join('.')+'.name" href="#"><span class="glyphicon glyphicon-list"> '+m.name.value+'</span></a></li>');
                 state.active = false;
             }
         }
@@ -319,10 +732,32 @@ function totodoo(data) {
         createTodoListItem(ul, 'publicLists', false, 'Public lists', state);
         createTodoListItem(ul, 'sharedLists', true, 'Shared lists', state);
         createTodoListItem(ul, 'privateLists', true, 'My lists', state);
+
+        $('.dropdown-submenu > a').submenupicker();
+        /*
+        ul.append('<li class="divider"></li>');
+        if (!loggedUser)
+        	ul.append('<li class="disabled"><a disabled href="#" id="addNewList">Add a new list</a></li>');
+        else
+        	ul.append('<li><a href="#" data-toggle="modal" data-target="#addNewList" id="addNewList">Add a new list</a></li>');
+        */
         addChangeListTriggers();
     }
 
 	return {data: data}
+}
+
+if (!Date.now) {
+	Date.now = function() { return new Date().getTime(); }
+}
+
+// http://apiux.com/2013/09/11/api-timezones/
+function getTimestamp(iso8601) {
+	if (typeof iso8601 == "undefined" || iso8601 == true) {
+		return new Date().toISOString();
+	}
+	return Date.now();
+	//return Date.now(); // Date.now() / 1000 | 0;
 }
 
 function guid() {
@@ -331,3 +766,157 @@ function guid() {
 	}
 	return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 }
+
+// http://w3lessons.info/2014/01/26/showing-busy-loading-indicator-during-an-ajax-request-using-jquery/
+function ajaxindicatorstart(text) {
+	
+	if($('body').find('#resultLoading').attr('id') != 'resultLoading'){
+		$('body').append('<div id="resultLoading" style="display:none"><div><img src="ajax-loader.gif"><div>'+text+'</div></div><div class="bg"></div></div>');
+	}
+
+	$('#resultLoading').css({
+		'width':'100%',
+		'height':'100%',
+		'position':'fixed',
+		'z-index':'10000000',
+		'top':'0',
+		'left':'0',
+		'right':'0',
+		'bottom':'0',
+		'margin':'auto'
+	});
+
+	$('#resultLoading .bg').css({
+		'background':'#000000',
+		'opacity':'0.7',
+		'width':'100%',
+		'height':'100%',
+		'position':'absolute',
+		'top':'0'
+	});
+
+	$('#resultLoading>div:first').css({
+		'width': '250px',
+		'height':'75px',
+		'text-align': 'center',
+		'position': 'fixed',
+		'top':'0',
+		'left':'0',
+		'right':'0',
+		'bottom':'0',
+		'margin':'auto',
+		'font-size':'16px',
+		'z-index':'10',
+		'color':'#ffffff'
+
+	});
+
+    $('#resultLoading .bg').height('100%');
+    $('#resultLoading').fadeIn(300);
+    $('body').css('cursor', 'wait');
+}
+
+// http://www.w3schools.com/cssref/pr_class_cursor.asp
+function ajaxindicatorstop() {
+    $('#resultLoading .bg').height('100%');
+    $('#resultLoading').fadeOut(300);
+    $('body').css('cursor', 'default');
+}
+
+function parseString(str) {
+	function escapeHtml(str) {
+	    var div = document.createElement('div');
+	    div.appendChild(document.createTextNode(str));
+	    return div.innerHTML;
+	}
+	function sanitizeHTML(str, white, black) {
+	   if (!white) white="b|i|u|br"; //allowed tags
+	   if (!black) black="script|object|embed"; //complete remove tags
+	   var e = new RegExp("(<("+black+")[^>]*>.*</\\2>|(?!<[/]?("+white+")(\\s[^<]*>|[/]>|>))<[^<>]*>|(?!<[^<>\\s]+)\\s[^</>]+(?=[/>]))", "gi");
+	   return str.replace(e, "");
+	}
+	return sanitizeHTML(str);
+}
+
+// load todo lists
+amplify.request.define( "lists", "ajax", {
+    url: "data.php",
+    dataType: "json",
+    type: "GET"
+});
+// save?
+amplify.request.define( "save", "ajax", {
+    url: "save.php",
+    dataType: "json",
+    type: "POST"
+});
+// create a new item (either list or todo item)
+amplify.request.define( "post", "ajax", {
+    url: "api.php?method=post",
+    dataType: "json",
+    type: "POST"
+});
+// update item (either list or todo item)
+amplify.request.define( "put", "ajax", {
+    url: "api.php?method=put",
+    dataType: "json",
+    type: "POST" // should be changed to PUT on real REST api
+});
+// get all lists and todo items
+amplify.request.define( "get", "ajax", {
+    url: "api.php?method=get",
+    dataType: "json",
+    type: "POST" // should be changed to GET on real REST api
+});
+// delete todo item. currently list items can't be deleted
+amplify.request.define( "delete", "ajax", {
+    url: "api.php?method=delete",
+    dataType: "json",
+    type: "POST" // should be changed to DELETE on real REST api
+});
+// order/rearrange todo items. currently list items can't be rearranged
+amplify.request.define( "order", "ajax", {
+    url: "api.php?method=order",
+    dataType: "json",
+    type: "POST" // should be changed to PUT on real REST api
+});
+
+var applicationStarted = false;
+
+$('#myButton').hide();
+
+$(document).ajaxStart(function () {
+    if (!applicationStarted) {
+        ajaxindicatorstart('Totodoo! Loading todo lists...');
+    } else {
+        //$('#myButton').html('Loading...').fadeIn(500);
+    }
+}).ajaxStop(function () {
+    if (applicationStarted) {
+        //$('#myButton').html('Last save time: ' + new Date().toISOString()).delay(2000).fadeOut(500);
+    }
+    applicationStarted = true;
+    ajaxindicatorstop();
+});
+
+// http://bootstrap-notify.remabledesigns.com/#documentation
+$.notifyDefaults({
+    placement: {
+        from: "top",
+        align: 'right'
+    },
+    offset: {
+        y: 70, 
+        x: 20
+    },
+    animate: {
+        enter: "animated fadeInDown",
+        exit: "animated fadeOutUp"
+    },
+    template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+        '<span data-notify="title">{1}</span>' +
+        '<span data-notify="message">{2}</span>' +
+    '</div>',
+    type: 'pastel-info'
+});
+        

@@ -1,11 +1,43 @@
 <?php
 
-define('SERVER_ROOT', dirname($_SERVER['SCRIPT_NAME']).'/');
+include 'bootstrap.php';
 
-include __DIR__.'/src/elonmedia/totodoo/php/bootstrap.php';
-include __DIR__.'/src/elonmedia/totodoo/php/authenticate.php';
+try {
 
-$user = isset($_SESSION['user']) ? $_SESSION['user'] : array();
+    $app = new Application();
+
+    if ($app->jwt->status == "AUTHENTICATED") {
+        flash(status('info', 'Login successful'));
+        // init application
+        main($app);
+    } else if ($app->jwt->status == "LOGOUT") {
+        flash(status('info', 'Logout successful'));
+        header('Location: index.php');
+        exit;
+    }
+
+} catch (\Stormpath\Resource\ResourceError $re) {
+
+    //print_err($re);
+
+    flash(status('warning', 'Resource error. Try to <a href="login.php">login</a> again.'));
+
+} catch (ExpiredException $ee) {
+    
+    //print_err($ee);
+    
+    flash(status('info', 'Session expired. Try to <a href="login.php">login</a> again.'));
+
+} catch (Guzzle\Http\Exception\CurlException $ge) {
+    
+    //print_err($ge);
+
+    flash(status('danger', 'There was a problem with network connection.'));
+
+}
+
+
+$user = $_SESSION['user'];
 
 $status = flash();
 
@@ -16,18 +48,22 @@ $jwtGETResponse = isset($_GET['jwtResponse']) ? $_GET['jwtResponse'] : "eyJ0eXAi
 <html>
     <head lang="en">
         <meta charset="UTF-8">
-        <title>Totodoo - Sample todo application with StormPath user management service</title>
+        <title>Totodoo - Sample todoo application with StormPath user management servide</title>
+
         <link rel="stylesheet" href="./bower_components/bootstrap/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="./bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="./bower_components/bootstrap-submenu/dist/css/bootstrap-submenu.min.css">
-        <link rel="stylesheet" href="./src/elonmedia/totodoo/css/animate.css">
+
         <link rel="stylesheet" href="./src/elonmedia/totodoo/css/style.css">
+
     </head>
     <body>
 
         <div id="addNewList" class="modal fade" tabindex="-1">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
+                    <!--form-->
+
                     <form class = "form-horizontal" id="myForm" method="post" action="index.php" role="form">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -83,52 +119,67 @@ $jwtGETResponse = isset($_GET['jwtResponse']) ? $_GET['jwtResponse'] : "eyJ0eXAi
                         <a tabindex="0" data-toggle="dropdown"><span class="glyphicon glyphicon-th-list"> Lists</span> <span class="caret"></span></a>
 
                         <!-- role="menu": fix moved by arrows (Bootstrap dropdown) -->
-                        <ul class="dropdown-menu" role="menu" id="todo-lists">
+                        <ul class="dropdown-menu" role="menu">
 
-                            <?php if (!$user) { ?>
-                            <li class="disabled"><a disabled tabindex="0" id="addNewList">Create a new list</a></li>
-                            <?php } else { ?>
-                            <li><a tabindex="0" data-toggle="modal" data-target="#addNewList" id="addNewList">Create a new list</a></li>
-                            <?php } ?>
+                         
+                            <li><a tabindex="0">Create a new list</a></li>
+                        
                             <li class="divider"></li>
 
-                            <li class="dropdown-submenu">
+                          <li class="dropdown-submenu">
+                            <a tabindex="0" data-toggle="dropdown">Public lists</a>
 
-                                <a tabindex="1" data-toggle="dropdown">Public lists</a>
+                            <ul class="dropdown-menu">
+                              <li><a tabindex="0">Sub action</a></li>
+                              <li class="dropdown-submenu">
+                                <a tabindex="0" data-toggle="dropdown">Another sub action</a>
 
-                                <ul class="dropdown-menu" id="publicLists">
+                                <ul class="dropdown-menu">
+                                  <li><a tabindex="0">Sub action</a></li>
+                                  <li><a tabindex="0">Another sub action</a></li>
+                                  <li><a tabindex="0">Something else here</a></li>
                                 </ul>
+                              </li>
+                              <li><a tabindex="0">Something else here</a></li>
+                              <li class="dropdown-submenu">
+                                <a tabindex="0" data-toggle="dropdown">Another action</a>
 
-                            </li>
-
-                            <?php if ($user) { ?>
-                            <li class="dropdown-submenu">
-
-                                <a tabindex="2" data-toggle="dropdown">Shared lists</a>
-
-                                <ul class="dropdown-menu" id="sharedLists">
+                                <ul class="dropdown-menu">
+                                  <li><a tabindex="0">Sub action</a></li>
+                                  <li><a tabindex="0">Another sub action</a></li>
+                                  <li><a tabindex="0">Something else here</a></li>
                                 </ul>
+                              </li>
+                            </ul>
+                          </li>
 
-                            </li>
+                          <li class="dropdown-submenu">
+                            <a tabindex="0" data-toggle="dropdown">Shared lists</a>
 
-                            <li class="dropdown-submenu">
+                            <ul class="dropdown-menu">
+                              <li><a tabindex="0">Sub action</a></li>
+                              <li><a tabindex="0">Another sub action</a></li>
+                              <li><a tabindex="0">Something else here</a></li>
+                            </ul>
+                          </li>
 
-                                <a tabindex="3" data-toggle="dropdown">Private lists</a>
+                          <li class="dropdown-submenu">
+                            <a tabindex="0" data-toggle="dropdown">Private lists</a>
 
-                                <ul class="dropdown-menu" id="privateLists">
-                                </ul>
+                            <ul class="dropdown-menu">
+                              <li><a tabindex="0">Sub action</a></li>
+                              <li><a tabindex="0">Another sub action</a></li>
+                              <li><a tabindex="0">Something else here</a></li>
+                            </ul>
+                          </li>
 
-                            </li>
-                            <?php } ?>
-<!--
-                            <li class="divider"></li>
+                        <li class="divider"></li>
 
-                            <li><a tabindex="4">Preferences</a></li>
---> 
+                          <li><a tabindex="0">Preferences</a></li>
+
                         </ul>
                       </li>
                     </ul>
-
 <!--
                   <form class="navbar-form navbar-left" role="search">
                     <div class="form-group">
@@ -136,16 +187,25 @@ $jwtGETResponse = isset($_GET['jwtResponse']) ? $_GET['jwtResponse'] : "eyJ0eXAi
                     </div>
                     <button type="submit" class="btn btn-default">Submit</button>
                   </form>
--->               
+-->
+
+                  
 
                   <ul class="nav navbar-nav navbar-right">
+
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-th-list"> Lists</span> <span class="caret"></span></a>
+                      <ul id="todo-lists" class="dropdown-menu" role="menu">
+
+                      </ul>
+                    </li>
 
                     <?php
 
                     if (!$user) { ?>
                     
-                    <li><a href="./?action=register">Sign up</a></li>
-                    <li><a href="./?action=login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    <li><a href="register.php">Sign up</a></li>
+                    <li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
 
                     <?php } ?>
                     <?php
@@ -156,7 +216,6 @@ $jwtGETResponse = isset($_GET['jwtResponse']) ? $_GET['jwtResponse'] : "eyJ0eXAi
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-bell"> Notifications</span> <span class="caret"></span></a>
                       <ul id="notifications" class="dropdown-menu" role="menu">
 
-                        <!--
                         <li>
                             <a href="#"><span class="glyphicon glyphicon-user"></span> Profile</a>
                             <div class="nav navbar-text progress" style="height: 10px; width: 200px; margin-top: 10px; padding-right: 5px;">
@@ -172,22 +231,26 @@ $jwtGETResponse = isset($_GET['jwtResponse']) ? $_GET['jwtResponse'] : "eyJ0eXAi
                               aria-valuemin="0" aria-valuemax="100" style="width:70%">
                                 7/10
                               </div>
-                              
+                              <!--
                               <div class="pull-right" style="font-size: 8px; margin-top: -4px">7/10</div>
-                            
+                              -->
                             </div>
                         </li>
-                        -->
+
                         
                       </ul>
                     </li>
 
                     <li class="dropdown">
-                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?=$user['firstname'] . " " . $user['lastname'];?> <span class="glyphicon glyphicon-user"></span> <span class="caret"></span></a>
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?=$user['firstname'] . " " . $user['lastname'];?> <span class="caret"></span></a>
                       <ul class="dropdown-menu" role="menu">
                         <li><a href="#"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+                        <!--
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        -->
                         <li class="divider"></li>
-                        <li><a href="./?action=logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                        <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
                       </ul>
                     </li>
 
@@ -198,10 +261,27 @@ $jwtGETResponse = isset($_GET['jwtResponse']) ? $_GET['jwtResponse'] : "eyJ0eXAi
             </nav>
 
             <div class="container-fluid">
+<!--
+                <div class="row">
+                </div>
 
+                <div class="row">
+
+                    <div class="col-md-12">
+
+
+                        <h1>STORMPATH JS TEST</h1>
+
+                        <?=$status?>
+
+                        <ul>
+                            <li>asdf</li>
+                        </ul>
+
+                    </div>
+                </div>
+-->
                 <div id="app">
-
-                <?=$status?>
 
                 <section id="todoapp">
                 
@@ -255,8 +335,8 @@ $jwtGETResponse = isset($_GET['jwtResponse']) ? $_GET['jwtResponse'] : "eyJ0eXAi
 
                     <div class="row">
                         <div class="col-md-12">
-                            <footer id="info">
-                                <!--<p>Double-click to edit a todo</p>-->
+                            <footer id="info"><!--
+                                <p>Double-click to edit a todo</p>-->
                                 <p>Created by <a href="http://twitter.com/oscargodson">Oscar Godson</a></p>
                                 <p>Refactored by <a href="https://github.com/markomanninen">Marko Manninen</a></p>
                                 <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
@@ -276,8 +356,11 @@ $jwtGETResponse = isset($_GET['jwtResponse']) ? $_GET['jwtResponse'] : "eyJ0eXAi
         <script type="text/javascript" src="./bower_components/amplify/lib/amplify.min.js"></script>
         <script type="text/javascript" src="./bower_components/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js"></script>
         <script type="text/javascript" src="./bower_components/bootstrap-submenu/dist/js/bootstrap-submenu.min.js"></script>
-        <script type="text/javascript" src="./bower_components/sprintf/dist/sprintf.min.js"></script>
+        <!--
         <script type="text/javascript" src="./bower_components/modelobserver/dist/modelobserver.min.js"></script>
+        -->
+        <script type="text/javascript" src="../../gits/modelobserver/dist/modelobserver.min.js"></script>
+        
         <script type="text/javascript" src="./src/elonmedia/totodoo/js/totodoo.js"></script>
         <script>
 
@@ -288,9 +371,17 @@ $jwtGETResponse = isset($_GET['jwtResponse']) ? $_GET['jwtResponse'] : "eyJ0eXAi
             });
 
             function init() {
+
+                $('.dropdown-submenu > a').submenupicker();
+
                 amplify.request( "lists", function( lists ) {
                     ttd = totodoo(lists, <?=isset($user['privateLists'])?1:0?>);
                 });
+
+                //$.notify('I have a progress bar', { showProgressbar: true });
+                //var notify = $.notify('<strong>Saving</strong> Do not close this page...', { allow_dismiss: false });
+                //notify.update({ type: 'warning', message: '<strong>Oops</strong> Something happened. Correcting Now', progress: 20 });
+
             }
 
         </script>

@@ -1,0 +1,71 @@
+{
+  "client": {
+    "name": "Elonmedia"
+  },
+  "roles": {
+    "role1": [
+      "permission1",
+      "permission2"
+    ],
+    "role2": [
+      "permission3",
+      "permission4"
+    ]
+  },
+  "totodoo": {
+    "lists": [
+      {
+        "name": "Todos",
+        "id": "6d4171d6-89b9-c1a4-777d-6fcac9d49965",
+        "created": "",
+        "updated": "",
+        "items": [
+          {
+            "name": "Example 1",
+            "id": "a9a8031a-02c9-44f9-6b45-0b68e058fa17",
+            "created": "",
+            "updated": "",
+            "completed": false
+          },
+          {
+            "name": "Example 2 (completed)",
+            "id": "4dc3ed3c-54a8-c8fd-03f0-655d5dff6555",
+            "created": "",
+            "updated": "",
+            "completed": true
+          }
+        ]
+      },
+      {
+        "name": "List 2",
+        "id": "4174ae61-3b36-0033-af73-2d7902b96de2",
+        "created": "",
+        "updated": "",
+        "items": [
+          {
+            "name": "Example 1 (completed)",
+            "id": "5c210b55-ce91-6540-e658-47f18bf86ff8",
+            "created": "",
+            "updated": "",
+            "completed": true
+          },
+          {
+            "name": "Example 2",
+            "id": "313e8236-f03f-ee06-8980-3620eee0c092",
+            "created": "",
+            "updated": "",
+            "completed": false
+          }
+        ]
+      }
+    ],
+    "shared": {
+      "group": {
+        "group_id": [{"user_id": "list_id"}]
+      },
+      "user": {
+        "user_id": [{"user_id": "list_id"}]
+      }
+    }
+  }
+}

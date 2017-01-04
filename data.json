@@ -1,0 +1,41 @@
+{
+ "notifications": [],
+ "publicLists": [
+  {
+   "id": "6d4171d6-89b9-c1a4-777d-6fcac9d49965",
+   "name": "Todos",
+   "items": [
+    {
+     "id": "4dc3ed3c-54a8-c8fd-03f0-655d5dff6555",
+     "name": "Example task 1",
+     "completed": false,
+     "timestamp": "2015-06-06T16:40:42.015Z"
+    },
+    {
+     "id": "a9a8031a-02c9-44f9-6b45-0b68e058fa17",
+     "name": "Example task 2 (completed)",
+     "completed": true,
+     "timestamp": "2015-06-06T16:40:42.015Z"
+    }
+   ]
+  },
+  {
+   "id": "4174ae61-3b36-0033-af73-2d7902b96de2",
+   "name": "List 2",
+   "items": [
+    {
+     "id": "5c210b55-ce91-6540-e658-47f18bf86ff8",
+     "name": "Example task 3",
+     "completed": false,
+     "timestamp": "2015-06-06T16:40:42.015Z"
+    },
+    {
+     "id": "313e8236-f03f-ee06-8980-3620eee0c092",
+     "name": "Example task 4 (completed)",
+     "completed": true,
+     "timestamp": "2015-06-06T16:40:42.015Z"
+    }
+   ]
+  }
+ ]
+}

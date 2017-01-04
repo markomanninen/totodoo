@@ -1,0 +1,69 @@
+{
+ "notifications": [],
+ "publicLists": [
+  {
+   "id": "20a6829a-186b-c016-103a-66118e37b7c1",
+   "name": "Todos",
+   "items": [
+    {
+     "id": "69fb08de-385d-3721-7378-75b0df2e3ad8",
+     "name": "Example task 1",
+     "completed": false,
+     "timestamp": ""
+    },
+    {
+     "id": "4d1f0c5f-c82f-3646-4f33-1490cab8bfc8",
+     "name": "Example task 2 (completed)",
+     "completed": true,
+     "timestamp": "2015-06-06T16:40:42.015Z"
+    }
+   ]
+  },
+  {
+   "id": "72c06e75-ba1a-6152-5462-6d8085aa3ce0",
+   "name": "List 2",
+   "items": [
+    {
+     "id": "8deaca23-5268-e978-fb1a-60f7dd210ac0",
+     "name": "Example task 3",
+     "completed": false,
+     "timestamp": "2015-06-06T16:40:42.015Z"
+    },
+    {
+     "id": "fd1b26e6-a73c-aa55-f75d-532ecb9d475c",
+     "name": "Example task 4 (completed)",
+     "completed": true,
+     "timestamp": "2015-06-06T16:40:42.015Z"
+    }
+   ]
+  }
+ ],
+ "sharedLists": [
+  {
+   "id": "1005415d-dc45-e61b-b517-f696d496267d",
+   "name": "List 3",
+   "items": [
+    {
+     "id": "870686c3-ff71-8dc4-1052-cf90ab85bce9",
+     "name": "Example task 5",
+     "completed": false,
+     "timestamp": "2015-06-06T16:40:42.015Z"
+    }
+   ]
+  }
+ ],
+ "privateLists": [
+  {
+   "id": "21582038-ab8e-4258-be98-6e8feb5c1311",
+   "name": "List 4",
+   "items": [
+    {
+     "id": "4eecaae3-d5db-7c51-1e93-9d7be3788c5c",
+     "name": "Example task 6",
+     "completed": false,
+     "timestamp": "2015-06-06T16:40:42.015Z"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,64 @@
+
+Sortable datalist
+-----------------
+
+data-bind="root.publicLists.0.items.0.completed" value="0"
+data-bind="root.publicLists.0.items.1.completed" value="1"
+data-bind="root.publicLists.0.items.2.completed" value="2"
+->
+data-bind="root.publicLists.0.items.1.completed" value="1"
+data-bind="root.publicLists.0.items.0.completed" value="0"
+data-bind="root.publicLists.0.items.2.completed" value="2"
+
+*****
+
+name="root[publicLists][0][items][0][completed]" value="0"
+name="root[publicLists][0][items][1][completed]" value="1"
+name="root[publicLists][0][items][2][completed]" value="2"
+->
+name="root[publicLists][0][items][1][completed]" value="1"
+name="root[publicLists][0][items][0][completed]" value="0"
+name="root[publicLists][0][items][2][completed]" value="2"
+
+*****
+
+name="root[publicLists][0][items][][completed]" value="0"
+name="root[publicLists][0][items][][completed]" value="1"
+name="root[publicLists][0][items][][completed]" value="2"
+->
+name="root[publicLists][0][items][][completed]" value="1"
+name="root[publicLists][0][items][][completed]" value="0"
+name="root[publicLists][0][items][][completed]" value="2"
+
+Needs to add order property, which is updated after sorting items on ui.
+
+Next time ui is refreshed and loaded, sorting is done by order property.
+
+One problem might be, that data-bind in this way may not reflect real path of the data
+
+but rather indicate the initial state of the paths when ui was rendered.
+
+It is hard to forecast if this will be a problem in the future. Data bind could be understood as an unique id for element, which means it is not really a path, but uuid of the element. It could as well be a hash string instead of dot path representation of the data node.
+
+Name attributes on the other hand should reserve their index positioning, because if sent by
+form submit, order of the elements will be same as in the ui.
+
+It seems, that sorting of the fields should not be incorporated on controller name attributes or data-bind identifiers. Sorting could be done on the background, if elements are already created, but on creation time, there wont be any order information on the background...
+
+Also on creation time ordering would be easier because there is no backend information to update. But if data already occurs on backend, then sorting information of the data should be set uptodate anyway.
+
+So?
+
+
+
+
+*****
+
+
+
+*****
+
+Öyhöttää, lompsia, lekkasta, 
+
+*****
+
