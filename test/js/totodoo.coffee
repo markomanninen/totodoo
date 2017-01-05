@@ -33,4 +33,3 @@ describe 'Totodoo App', ->
 				text = drvr.findElement(id: 'listName').getText()
 				expect(text).to.eventually.equal
 				'Public list 1'
-				@timeout 4000
