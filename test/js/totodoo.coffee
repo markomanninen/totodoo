@@ -27,10 +27,10 @@ describe 'Totodoo App', ->
 			'Totodoo - Sample todo application with StormPath user management service'
 			@timeout 4000, done()
 
-		it 'is the name of the default list', (done) ->
+		it 'is the name of the default list', ->
 			drvr = @driver
 			@driver.wait((()-> drvr.executeScript('return document.readyState')), 4000).then ()->
 				text = drvr.findElement(id: 'listName').getText()
 				expect(text).to.eventually.equal
 				'Public list 1'
-				@timeout 4000, done()
+				@timeout 4000
