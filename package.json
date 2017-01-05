@@ -26,5 +26,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/markomanninen/totodoo.git"
+  },
+  "scripts": {
+    "postinstall": "./node_modules/bower/bin/bower install"
   }
 }
