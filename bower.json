@@ -20,7 +20,7 @@
   ],
   "dependencies": {
     "bootstrap-submenu": "~1.2.13",
-    "jquery-ui": "~1.11.4",
+    "jquery-ui": "*",
     "bootstrap": "~3.3.4",
     "amplify": "~1.1.2",
     "modelobserver": "*",
