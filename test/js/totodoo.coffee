@@ -22,6 +22,15 @@ describe 'Totodoo App', ->
 	describe 'Init', ->
 
 		it 'has the title of the application in the window\'s title', (done) ->
-			expect(@driver.getTitle()).to.eventually.contain
+			text = @driver.getTitle()
+			expect(text).to.eventually.contain
 			'Totodoo - Sample todo application with StormPath user management service'
 			@timeout 4000, done()
+
+		it 'is the name of the default list', (done) ->
+			drvr = @driver
+			@driver.wait((()-> drvr.executeScript('return document.readyState')), 4000).then ()->
+				text = drvr.findElement(id: 'listName').getText()
+				expect(text).to.eventually.equal
+				'Public list 1'
+				@timeout 4000, done()
