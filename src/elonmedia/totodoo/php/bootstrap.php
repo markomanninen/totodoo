@@ -21,8 +21,13 @@ require_once APPLICATION_ROOT . 'vendor/autoload.php';
 require_once APPLICATION_SRC . 'functions.php';
 
 define('LIST_APPLICATIONS', FALSE);
-define('STORMPATH_API_KEYS', '/Users/markom/.stormpath/apiKey.properties');
 define('STORMPATH_APPLICATION_ID', '3jcnVb1RNNTPCO0W79yTBU');
 define('STORMPATH_CALLBACK_URI', callbackURI());
+define('STORMPATH_API_KEYS', '/Users/markom/.stormpath/apiKey.properties');
 
-\Stormpath\Client::$apiKeyFileLocation = STORMPATH_API_KEYS;
+if (file_exists(STORMPATH_API_KEYS)) {
+	\Stormpath\Client::$apiKeyFileLocation = STORMPATH_API_KEYS;
+} else {
+	$apiKeyProperties = "apiKey.id={$_ENV['STORMPATH_API_ID']}\napiKey.secret={$_ENV['STORMPATH_API_KEY']}";
+	\Stormpath\Client::$apiKeyProperties = $apiKeyProperties;
+}

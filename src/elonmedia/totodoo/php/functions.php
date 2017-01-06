@@ -39,7 +39,12 @@ class Application {
     function setClient() {
         if (!$this->client && $this->builder) {
             $this->builder = new \Stormpath\ClientBuilder();
-            $this->client = $this->builder->setApiKeyFileLocation(STORMPATH_API_KEYS)->build();
+            if (file_exists(STORMPATH_API_KEYS)) {
+                $this->client = $this->builder->setApiKeyFileLocation(STORMPATH_API_KEYS)->build();
+            } else {
+                $apiKeyProperties = "apiKey.id={$_ENV['STORMPATH_API_ID']}\napiKey.secret={$_ENV['STORMPATH_API_KEY']}";
+                $this->client = $this->builder->setApiKeyProperties($apiKeyProperties)->build();
+            }
         }
         return $this->client;
     }
