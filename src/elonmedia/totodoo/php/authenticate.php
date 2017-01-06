@@ -59,4 +59,6 @@ try {
     flash(status('info', 'Session expired.'));
 } catch (Guzzle\Http\Exception\CurlException $ge) {
     flash(status('danger', 'Network problem.'));
+} catch (Exception $e) {
+    flash(status('danger', print_r($e->getMessage(), 1)));
 }
