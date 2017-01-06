@@ -40,7 +40,7 @@ describe 'Totodoo App', ->
 			drvr = @driver
 			# wait for page to be loaded
 			@driver.wait((()-> drvr.executeScript('return document.readyState')), 10000).then ()->
-				lis = drvr.findElement(id: 'todo-list').findElements(tagName: 'li')
-				expect(lis.size()).to.eventually.equal
+				size = selenium.getEval('window.document.querySelectorAll("#todo-list li").length')
+				expect(size).to.eventually.equal
 				2
 			@timeout 4000, done()
