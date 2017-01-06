@@ -34,4 +34,4 @@ describe 'Totodoo App', ->
 				text = drvr.findElement(id: 'listName').getText()
 				expect(text).to.eventually.contain
 				'Todos'
-				done()
+			@timeout 4000, done()
