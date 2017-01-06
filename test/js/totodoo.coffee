@@ -29,8 +29,9 @@ describe 'Totodoo App', ->
 
 		it 'is the name of the default list', (done) ->
 			drvr = @driver
-			@driver.wait(-> drvr.executeScript('return document.readyState'), 10000)
-			text = @driver.findElement(id: 'listName').getText()
-			expect(text).to.eventually.contain
-			'Todos'
-			@timeout 4000, done()
+			# wait for page to be loaded
+			@driver.wait((()-> drvr.executeScript('return document.readyState')), 10000).then ()->
+				text = drvr.findElement(id: 'listName').getText()
+				expect(text).to.eventually.contain
+				'Todos'
+				done()
