@@ -156,6 +156,7 @@ $jwtGETResponse = isset($_GET['jwtResponse']) ? $_GET['jwtResponse'] : "eyJ0eXAi
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-bell"> Notifications</span> <span class="caret"></span></a>
                       <ul id="notifications" class="dropdown-menu" role="menu">
 
+                        <div class="notifications-wrapper"></div>
                         <!--
                         <li>
                             <a href="#"><span class="glyphicon glyphicon-user"></span> Profile</a>

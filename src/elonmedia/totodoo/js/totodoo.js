@@ -18,6 +18,15 @@ function notificationcenter(data) {
                 	console.log(response);
             	}
             );
+
+             $('.notifications-wrapper').append('\
+                <a class="content" href="#">\
+                    <div class="notification-item">\
+                        <h4 class="item-title">'+value[0].timestamp+'</h4>\
+                        <p class="item-info">'+value[0].message+'</p>\
+                    </div>\
+                </a>'
+            );
 			
             return value;
         }
