@@ -4,7 +4,10 @@ php:
   - 5.4
 
 env:
-  - TRAVIS_NODE_VERSION="6"
+  global:
+    - secure: "Hbs0fuD4Y/nybxMR++YSaddF41F52LOUOE3Ow5KVRcGh9sL7/WMQMhDGr+cgZcckB8zUZQL6R4YRfwu4dzUSR4RpcOPQsPY2WObgWVefPg1PaP0VAtol8+nw5eT7786RyR76pZjjqkra9JWlASQIByfnpBvh9/Q/vs/RqfCH5XyBUulELMplYAi4+CLLUmm7xCyyQAjTFztHWd7hLcMcS/E6M8py9/B8uscwunNMhKPQ1UjusmmhIi5Nu2fs7vBhEhETUBe3/8EnTo/e7itiv9DNG//T8ndraa2e2ili2cCww0ZiKbZ6IsbKQH4WT0FwnlIQpNX0U8FslbHZvwpor64lexV7AR4atjSZWD103QVNTCtfO2/y3cFVoeGlm1C7mlPlfmC7kxiZZtT3OJHdpaEqwos4FqSUKI6GRE+VDvxSuk/n/ra6nen5eGJ7Rn1n1aZv6BacK73VdXrQaGPd8waN/BlZYO8vTFN6q09uivPzSTzQ/535xSwSHxaVbtNcw/IuFYvCe8J54PxpYN3EwBk73fNmnHDfyDPh1cLHE2Ud/UUvtRKxMxHbYpIVHZyrcHRRoto6Y8v3m0cQOJkX0kRhoSqW0l6FTOSwPTGM9SEb1wQ9F+7hBIBBsIEo4gbhLDJM9JovnytYTyn9J1NXl3Tmna2xAJE1DfOyQooBPVk="
+  matrix:
+    - TRAVIS_NODE_VERSION="6"
 
 install:
   # new version of node and npm
