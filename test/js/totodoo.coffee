@@ -35,3 +35,12 @@ describe 'Totodoo App', ->
 				expect(text).to.eventually.contain
 				'Todos'
 			@timeout 4000, done()
+
+		it 'is the length of the default list items', (done) ->
+			drvr = @driver
+			# wait for page to be loaded
+			@driver.wait((()-> drvr.executeScript('return document.readyState')), 10000).then ()->
+				lis = element.all(drvr.findElement(id: 'todo-list').findElements(tagName: 'li'))
+				expect(lis.count()).to.eventually.equal
+				2
+			@timeout 4000, done()
