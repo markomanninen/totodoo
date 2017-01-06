@@ -35,7 +35,7 @@ describe 'Totodoo App', ->
 		it 'is the length of the default list items = 2', (done) ->
 			drvr = @driver
 			@driver.wait((()-> drvr.executeScript('return document.readyState')), 10000).then ()->
-				lis = alement.all(drvr.findElement(id: 'todo-list').findElements(tagName: 'li'))
+				lis = element.all(drvr.findElement(id: 'todo-list').findElements(tagName: 'li'))
 				expect(lis.count()).to.eventually.equal 2
 				done()
 
