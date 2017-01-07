@@ -49,7 +49,8 @@ describe 'Totodoo App', ->
 			drvr = @driver
 			# wait for page to be loaded
 			@driver.wait((()-> drvr.executeScript('return document.readyState')), 10000).then ()->
-				drvr.executeScript("document.getElementById('new-todo').setAttribute('value', 'New item')")
+				#drvr.executeScript("document.getElementById('new-todo').setAttribute('value', 'New item')")
+				drvr.findElement(id: 'new-todo').sendKeys('New item')
 				drvr.findElement(id: 'new-todo').submit()
 				size = drvr.executeScript('return window.document.querySelectorAll("#todo-list li").length')
 				expect(size).to.eventually.equal
