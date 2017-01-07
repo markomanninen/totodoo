@@ -36,11 +36,41 @@ describe 'Totodoo App', ->
 				'Todos'
 			@timeout 4000, done()
 
-		it 'is the length of the default list items', (done) ->
+		it 'is the length of the default list items=2', (done) ->
 			drvr = @driver
 			# wait for page to be loaded
 			@driver.wait((()-> drvr.executeScript('return document.readyState')), 10000).then ()->
 				size = drvr.executeScript('return window.document.querySelectorAll("#todo-list li").length')
 				expect(size).to.eventually.equal
 				2
+			@timeout 4000, done()
+
+		it 'is the item added to the default list', (done) ->
+			drvr = @driver
+			# wait for page to be loaded
+			@driver.wait((()-> drvr.executeScript('return document.readyState')), 10000).then ()->
+				drvr.findElement(id: 'new-todo').send_keys('New item').submit()
+				size = drvr.executeScript('return window.document.querySelectorAll("#todo-list li").length')
+				expect(size).to.eventually.equal
+				3
+			@timeout 4000, done()
+
+		it 'is the length of the completed items = 1', (done) ->
+			drvr = @driver
+			# wait for page to be loaded
+			@driver.wait((()-> drvr.executeScript('return document.readyState')), 10000).then ()->
+				drvr.findElement(linkText: 'Completed').click()
+				size = drvr.executeScript('return window.document.querySelectorAll("#todo-list li.completed").length')
+				expect(size).to.eventually.equal
+				1
+			@timeout 4000, done()
+
+		it 'is the length of the active items = 1', (done) ->
+			drvr = @driver
+			# wait for page to be loaded
+			@driver.wait((()-> drvr.executeScript('return document.readyState')), 10000).then ()->
+				drvr.findElement(linkText: 'Active').click()
+				size = drvr.executeScript('return window.document.querySelectorAll("#todo-list li:not(completed)").length')
+				expect(size).to.eventually.equal
+				1
 			@timeout 4000, done()
