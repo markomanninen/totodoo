@@ -28,6 +28,6 @@ define('STORMPATH_API_KEYS', '/Users/markom/.stormpath/apiKey.properties');
 if (file_exists(STORMPATH_API_KEYS)) {
 	\Stormpath\Client::$apiKeyFileLocation = STORMPATH_API_KEYS;
 } else {
-	$apiKeyProperties = "apiKey.id={$_ENV['STORMPATH_API_ID']}\napiKey.secret={$_ENV['STORMPATH_API_KEY']}";
+	$apiKeyProperties = "apiKey.id=".getenv('STORMPATH_API_ID')."\napiKey.secret=".getenv('STORMPATH_API_KEY');
 	\Stormpath\Client::$apiKeyProperties = $apiKeyProperties;
 }

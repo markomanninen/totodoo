@@ -42,7 +42,7 @@ class Application {
             if (file_exists(STORMPATH_API_KEYS)) {
                 $this->client = $this->builder->setApiKeyFileLocation(STORMPATH_API_KEYS)->build();
             } else {
-                $apiKeyProperties = "apiKey.id={$_ENV['STORMPATH_API_ID']}\napiKey.secret={$_ENV['STORMPATH_API_KEY']}";
+                $apiKeyProperties = "apiKey.id=".getenv('STORMPATH_API_ID')."\napiKey.secret=".getenv('STORMPATH_API_KEY');
                 $this->client = $this->builder->setApiKeyProperties($apiKeyProperties)->build();
             }
         }
