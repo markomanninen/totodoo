@@ -168,7 +168,7 @@ class Application {
 }
 
 function callbackURI() {
-    return strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,strpos( $_SERVER["SERVER_PROTOCOL"],'/'))).'://'.trim($_SERVER['HTTP_HOST'], '/').(SERVER_ROOT?'/'.trim(SERVER_ROOT, '/'):'').'/index.php';
+    return strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,strpos( $_SERVER["SERVER_PROTOCOL"],'/'))).'://'.trim($_SERVER['HTTP_HOST'], '/').(trim(SERVER_ROOT, '/')?'/'.trim(SERVER_ROOT, '/'):'').'/index.php';
 }
 
 function print_err($err) {

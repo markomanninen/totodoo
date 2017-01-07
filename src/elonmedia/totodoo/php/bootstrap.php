@@ -22,12 +22,13 @@ require_once APPLICATION_SRC . 'functions.php';
 
 define('LIST_APPLICATIONS', FALSE);
 define('STORMPATH_APPLICATION_ID', '3jcnVb1RNNTPCO0W79yTBU');
-define('STORMPATH_CALLBACK_URI', callbackURI());
 define('STORMPATH_API_KEYS', '/Users/markom/.stormpath/apiKey.properties');
 
 if (file_exists(STORMPATH_API_KEYS)) {
 	\Stormpath\Client::$apiKeyFileLocation = STORMPATH_API_KEYS;
+	define('STORMPATH_CALLBACK_URI', callbackURI());
 } else {
 	$apiKeyProperties = "apiKey.id=".getenv('STORMPATH_API_ID')."\napiKey.secret=".getenv('STORMPATH_API_KEY');
 	\Stormpath\Client::$apiKeyProperties = $apiKeyProperties;
+	define('STORMPATH_CALLBACK_URI', 'https://totodoo.herokuapp.com/index.php');
 }
