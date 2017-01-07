@@ -261,6 +261,7 @@ $jwtGETResponse = isset($_GET['jwtResponse']) ? $_GET['jwtResponse'] : "eyJ0eXAi
                                 <p>Created by <a href="http://twitter.com/oscargodson">Oscar Godson</a></p>
                                 <p>Refactored by <a href="https://github.com/markomanninen">Marko Manninen</a></p>
                                 <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+                                <p><?=STORMPATH_CALLBACK_URI?></p>
                             </footer>
                         </div>
                     </div>   
