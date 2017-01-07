@@ -1,6 +1,6 @@
 <?php
 
-define('SERVER_ROOT', dirname($_SERVER['SCRIPT_NAME']).'/');
+define('SERVER_ROOT', dirname($_SERVER['SCRIPT_NAME']));
 
 include __DIR__.'/src/elonmedia/totodoo/php/bootstrap.php';
 include __DIR__.'/src/elonmedia/totodoo/php/authenticate.php';

@@ -31,5 +31,3 @@ if (file_exists(STORMPATH_API_KEYS)) {
 	$apiKeyProperties = "apiKey.id=".getenv('STORMPATH_API_ID')."\napiKey.secret=".getenv('STORMPATH_API_KEY');
 	\Stormpath\Client::$apiKeyProperties = $apiKeyProperties;
 }
-
-echo '<!--'.STORMPATH_CALLBACK_URI.'-->';
